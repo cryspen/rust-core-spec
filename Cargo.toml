@@ -1,0 +1,23 @@
+workspace = { members = ["partial_compute"] }
+
+[package]
+name = "core-spec"
+version = "0.1.0"
+edition = "2021"
+
+build = "build/main.rs"
+
+[build-dependencies]
+rand = "0.8.5"
+arbitrary = "1.3.2"
+partial_compute = {path = "partial_compute"}
+syn = { version = "2.0", features = ["full"] }
+prettyplease = "0.2"
+itertools = "0.12.0"
+num-bigint = "0.4.4"
+num-traits = "0.2.17"
+once_cell = "1.19.0"
+
+[dependencies]
+num-bigint = "0.4.4"
+num-traits = "0.2.17"

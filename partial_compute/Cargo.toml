@@ -1,0 +1,18 @@
+[package]
+name = "partial_compute"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = { version = "2.0", features = ["visit-mut", "visit", "extra-traits", "full"] }
+quote = "1.0"
+proc-macro-error = "1.0.4"
+proc-macro2 = "1.0.76"
+prettyplease = "0.2"
+darling = "0.20.3"
+synattra = "0.2.1"
+deluxe = "0.5.0"
+structmeta = "0.2.0"
