@@ -243,6 +243,15 @@ pub trait PrintRust {
     fn print_type() -> String;
 }
 
+impl PrintRust for bool {
+    fn print_as_rust(&self) -> String {
+        format!("{}", self)
+    }
+    fn print_type() -> String {
+        "bool".into()
+    }
+}
+
 impl<T: PrintRust> PrintRust for Vec<T> {
     fn print_as_rust(&self) -> String {
         if self.is_empty() {
