@@ -22,17 +22,28 @@ specifications of functions.
 
 Independenlty, we generate automatically test cases for those contracts.
 
-# Proof Of Concept
-The contract definition is currently living in `./build.rs`, and
-generates `src/generated.rs`.
+# Quickstart
+The various contracts are defined in the `src/specs` folder.
 
-To see the documentation: run `cargo doc --no-deps --open` and then
-browse the documentation for module `generated`.
+Running `cargo build` generates the tests under two different formats.
+ 1. `generated_tests/doc.rs`: a "literate" Rust module which contains
+    tests as documentation examples. This format is especially useful
+    for browsing the tests: just run `cargo doc --no-deps --open` and
+    browse the `tests` module.
+ 2. `generated_tests/bin.rs`: a binary that packs all the tests as
+    plain `asserts!`, running them in sequence. No TCB involved
+    (e.g. `rustdoc`), just vanilla Rust.
 
-To run the tests displayed in the documentation, just run `cargo test`.
+Tests can be run in two different ways:
+ - `cargo test` will ask `rustdoc` to test all the documentation
+examples from `generated_tests/doc.rs`. The downside is that you need
+to trust that `rustdoc` indeed executes all the tests.
+ - `cargo run` will run the binary built from
+   `generated_tests/bin.rs`, which runs all the tests in a very simple
+   and understandable way.
 
-## Contracts
-### Definition
+# Contracts
+## Definition
 A contract is defined by the following data.
  - Some metadata (title, english description).
  - A sequence of typed input variables `x₁: T₁`...`xᵢ: Tᵢ`.
@@ -40,10 +51,10 @@ A contract is defined by the following data.
  - A precondition (a boolean predicate on the contract's domain);
  - A postcondition (a boolean predicate on the contract's domain).
  
-### Test vector
+## Test vector
 A contract can be instantiated with values of its domain.
 
-### Abstractions
+## Abstractions
 To define contracts, we usually use abstractions.
 
 For instance, we model the addition on machine integer of some size
@@ -64,7 +75,7 @@ possible: we don't want to test `core` modulo the semantics of our
 abstraction. We want to test `core` itself, and the valididty of the
 generated tests should be obvious to the reader.
 
-### Partial computations: have your cake and eat it too
+## Partial computations: have your cake and eat it too
 Here, we want both to have abstract contracts and very concrete tests:
 it seems a bit contradictory.
 
@@ -78,9 +89,9 @@ first arguments, it produces a rust expression (a string) where the
 Through this mechanics, we can concretize a contract in a flexible
 way.
 
-## Test vector generation
+# Test vector generation
 Currently test vectors are a combination of (1) an optional,
 user-defined list of tests and (2) randomly generated values.
 
-We want to leverage the hax toolchain to automatically find edge
+gWe want to leverage the hax toolchain to automatically find edge
 cases, given the actual `core` implementation and the specification.
