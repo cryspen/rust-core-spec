@@ -172,7 +172,7 @@ macro_rules! contract {
             type TheType = ($($input_ty),*);
             let edge_cases: Vec<TheType> = TheType::edge_cases().iter().cloned().filter(|($($input),*)| pre($(<$input_ty as std::clone::Clone>::clone($input)),*)).collect();
             if(edge_cases.len() >= DEFAULT_N * 1/2 && $crate::default_value!($($n)? 0) == 0 && $crate::default_value!($($n)? 1) == 1) {
-                n += edge_cases.len() - DEFAULT_N * 1/2;
+                n += DEFAULT_N * 1/2;
             }
             let test_vector: Vec<TheType> =
                 [$($($test_vector),*)?].iter().cloned().chain(
