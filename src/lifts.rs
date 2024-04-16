@@ -26,6 +26,153 @@ impl Lift for () {
     }
 }
 
+use std::sync::Arc;
+
+#[derive(Clone)]
+pub struct Fn1<I, O> {
+    pub f: Arc<dyn Fn(I) -> O>,
+    pub string: String,
+}
+
+#[derive(Clone)]
+pub struct FnR1<I, O> {
+    pub f: Arc<dyn for<'a> Fn(&'a I) -> O>,
+    pub string: String,
+}
+
+impl<I: PrintRust, O: PrintRust> PrintRust for FnR1<I, O> {
+    fn print_as_rust(&self) -> String {
+        format!("({})", self.string)
+    }
+    fn print_type() -> String {
+        format!("Fn(&{}) -> {}", I::print_type(), O::print_type())
+    }
+}
+
+impl<I: PrintRust, O: PrintRust> PrintRust for Fn1<I, O> {
+    fn print_as_rust(&self) -> String {
+        format!("({})", self.string)
+    }
+    fn print_type() -> String {
+        format!("Fn({}) -> {}", I::print_type(), O::print_type())
+    }
+}
+
+impl<I, O> std::hash::Hash for Fn1<I, O> {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        false.hash(state);
+        self.string.hash(state);
+    }
+}
+
+impl<I, O> std::hash::Hash for FnR1<I, O> {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        true.hash(state);
+        self.string.hash(state);
+    }
+}
+
+impl<I, O> Eq for Fn1<I, O> {}
+impl<I, O> PartialEq for Fn1<I, O> {
+    fn eq(&self, other: &Self) -> bool {
+        self.string == other.string
+    }
+}
+
+impl<I, O> Eq for FnR1<I, O> {}
+impl<I, O> PartialEq for FnR1<I, O> {
+    fn eq(&self, other: &Self) -> bool {
+        self.string == other.string
+    }
+}
+
+impl<I, O> Fn1<I, O> {
+    fn call(&self, i: I) -> O {
+        (self.f)(i)
+    }
+}
+
+macro_rules! mkfn {
+    (|$pat:ident : $ty:ty| $body:expr) => {
+        Fn1::<$ty, _> {
+            f: Arc::new(move |$pat: $ty| $body),
+            string: format!("{}", stringify!(|$pat: $ty| $body)),
+        }
+    };
+    ($str:expr, |$pat:ident : $ty:ty| $body:expr) => {
+        Fn1::<$ty, _> {
+            f: Arc::new(move |$pat: $ty| $body),
+            string: $str,
+        }
+    };
+}
+
+macro_rules! mkfnr {
+    ($str:expr, |$pat:ident : &$ty:ty| $body:expr) => {
+        FnR1::<$ty, _> {
+            f: Arc::new(move |$pat: &$ty| $body),
+            string: $str,
+        }
+    };
+}
+
+impl<'a> arbitrary::Arbitrary<'a> for Fn1<u8, bool> {
+    fn arbitrary(u: &mut arbitrary::Unstructured<'a>) -> arbitrary::Result<Self> {
+        Ok(mkfn!(|x: u8| x > 128))
+    }
+}
+
+impl<'a> arbitrary::Arbitrary<'a> for FnR1<u8, bool> {
+    fn arbitrary(u: &mut arbitrary::Unstructured<'a>) -> arbitrary::Result<Self> {
+        Ok(mkfnr!("|x: &u8| *x > 128".into(), |x: &u8| *x > 128))
+    }
+}
+
+impl TypicalEdgeCases for Fn1<u8, bool> {
+    fn edge_cases() -> Vec<Self> {
+        vec![]
+            .into_iter()
+            .chain(
+                u8::edge_cases()
+                    .into_iter()
+                    .map(|y| mkfn!(format!("|x: u8| x < {}", y.print_as_rust()), |x: u8| x < y)),
+            )
+            .collect()
+    }
+}
+
+impl TypicalEdgeCases for FnR1<u8, bool> {
+    fn edge_cases() -> Vec<Self> {
+        vec![]
+            .into_iter()
+            .chain(u8::edge_cases().into_iter().map(|y| {
+                mkfnr!(format!("|x: &u8| *x < {}", y.print_as_rust()), |x: &u8| *x
+                    < y)
+            }))
+            .collect()
+    }
+}
+
+impl<'a> arbitrary::Arbitrary<'a> for Fn1<u8, u8> {
+    fn arbitrary(u: &mut arbitrary::Unstructured<'a>) -> arbitrary::Result<Self> {
+        Ok(mkfn!("|x: u8| x".into(), |x: u8| x))
+    }
+}
+
+impl TypicalEdgeCases for Fn1<u8, u8> {
+    fn edge_cases() -> Vec<Self> {
+        vec![mkfn!(|x: u8| x.wrapping_add(x))]
+            .into_iter()
+            .chain(u8::edge_cases().into_iter().map(|y| {
+                mkfn!(
+                    format!("|x: u8| x.wrapping_add({})", y.print_as_rust()),
+                    |x: u8| x.wrapping_add(y)
+                )
+            }))
+            .collect()
+    }
+}
+
 pub trait TypicalEdgeCases: Sized {
     fn edge_cases() -> Vec<Self>;
 }
