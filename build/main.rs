@@ -9,10 +9,6 @@ mod lifts;
 #[path = "../src/specs/mod.rs"]
 mod specs;
 
-fn rust_format(contents: &str) -> String {
-    prettyplease::unparse(&syn::parse_str(contents).expect(&format!("Could not parse {contents}")))
-}
-
 fn main() {
     specs::specs();
     let count = helpers::COUNT.lock().unwrap();
@@ -25,7 +21,7 @@ fn main() {
     );
     std::fs::write(
         "src/test_driver.rs",
-        rust_format(&format!(
+        format!(
             "//! This module contains {count} tests, organized in functions.\n{}\n{}\nfn main(){{{}}}", 
             "#![allow(arithmetic_overflow)]
 use core_spec::lifts::*;
@@ -37,6 +33,6 @@ use core_spec::*;
                 .map(|r#fn| format!("{}();", r#fn))
                 .collect::<Vec<_>>()
                 .join("\n")
-        )),
+        ),
     );
 }

@@ -17,6 +17,12 @@ pub fn list_functions() -> Vec<String> {
     FUNCTIONS.lock().unwrap().clone()
 }
 
+pub fn prefix_lines<'a>(prefix: &'a str, line: &'a str) -> impl Iterator<Item = String> + 'a {
+    line.trim()
+        .split("\n")
+        .map(move |line| format!("{prefix}{line}"))
+}
+
 const _: () = {
     static OUTPUT: Lazy<Mutex<Vec<(OutKind, String)>>> = Lazy::new(|| Mutex::new(vec![]));
 
@@ -32,11 +38,7 @@ const _: () = {
         }
         pub fn write_prefixed<S: Into<String>>(self, prefix: &str, line: S) {
             let line: String = line.into();
-            self.write_lines(
-                line.trim()
-                    .split("\n")
-                    .map(|line| format!("{prefix} {line}")),
-            );
+            self.write_lines(prefix_lines(prefix, &line));
         }
         pub fn dump(self) -> String {
             OUTPUT
@@ -102,19 +104,33 @@ macro_rules! tests {
                 )
             );
 
+            fn rust_format(contents: &str) -> String {
+                prettyplease::unparse(&syn::parse_str(contents).expect(&format!("Could not parse {contents}")))
+            }
+            fn rust_format_expr(contents: &str) -> String {
+                let contents = rust_format(&format!("fn dummy_fn(){{{}}}", contents));
+                contents
+                    .strip_prefix("fn dummy_fn() {").unwrap()
+                    .strip_suffix("}\n").unwrap()
+                    .split("\n").filter(|line|line.trim() != "")
+                    .collect::<Vec<_>>().join("\n").into()
+            }
+
             {
-                OutKind::VanillaBin.write_prefixed("///", $header);
-                OutKind::VanillaBin.write(format!("pub fn {}{}", FN, "(){"));
-                OutKind::VanillaBin.write(format!(r##"eprintln!(r#"Testing "{}"... ({} contracts)"#);"##, $header, contracts.len()));
-                OutKind::VanillaBin.write(format!(r##"eprint!(r#"  "#);"##));
+                OutKind::VanillaBin.write_prefixed("/// ", $header);
+                let mut body = vec![];
+                body.push(format!("pub fn {}{}", FN, "(){"));
+                body.push(format!(r##"  eprintln!(r#"Testing "{}"... ({} contracts)"#);"##, $header, contracts.len()));
+                body.push(format!(r##"  eprint!("  ");"##));
                 for RenderedContract {header, asserts} in contracts.iter() {
-                    OutKind::VanillaBin.write_prefixed("//", header);
-                    OutKind::VanillaBin.write("{");
-                    OutKind::VanillaBin.write(asserts);
-                    OutKind::VanillaBin.write("}");
-                    OutKind::VanillaBin.write(format!(r##"eprint!(r#"... "#);"##));
+                    body.extend(prefix_lines("  // ", header));
+                    body.push("  {".into());
+                    body.push(rust_format_expr(&asserts));
+                    body.push("  }".into());
+                    body.push(r##"  eprint!("... ");"##.into());
                 }
-                OutKind::VanillaBin.write(r#"eprintln!("✓\n");"#);
+                body.push(r#"  eprintln!("✓\n");"#.into());
+                OutKind::VanillaBin.write_prefixed("", &body.join("\n"));
                 OutKind::VanillaBin.write("}");
             }
         }
