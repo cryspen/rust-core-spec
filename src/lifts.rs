@@ -86,12 +86,6 @@ impl<I, O> PartialEq for FnR1<I, O> {
     }
 }
 
-impl<I, O> Fn1<I, O> {
-    fn call(&self, i: I) -> O {
-        (self.f)(i)
-    }
-}
-
 macro_rules! mkfn {
     (|$pat:ident : $ty:ty| $body:expr) => {
         Fn1::<$ty, _> {
@@ -117,13 +111,13 @@ macro_rules! mkfnr {
 }
 
 impl<'a> arbitrary::Arbitrary<'a> for Fn1<u8, bool> {
-    fn arbitrary(u: &mut arbitrary::Unstructured<'a>) -> arbitrary::Result<Self> {
+    fn arbitrary(_: &mut arbitrary::Unstructured<'a>) -> arbitrary::Result<Self> {
         Ok(mkfn!(|x: u8| x > 128))
     }
 }
 
 impl<'a> arbitrary::Arbitrary<'a> for FnR1<u8, bool> {
-    fn arbitrary(u: &mut arbitrary::Unstructured<'a>) -> arbitrary::Result<Self> {
+    fn arbitrary(_: &mut arbitrary::Unstructured<'a>) -> arbitrary::Result<Self> {
         Ok(mkfnr!("|x: &u8| *x > 128".into(), |x: &u8| *x > 128))
     }
 }
@@ -154,7 +148,7 @@ impl TypicalEdgeCases for FnR1<u8, bool> {
 }
 
 impl<'a> arbitrary::Arbitrary<'a> for Fn1<u8, u8> {
-    fn arbitrary(u: &mut arbitrary::Unstructured<'a>) -> arbitrary::Result<Self> {
+    fn arbitrary(_: &mut arbitrary::Unstructured<'a>) -> arbitrary::Result<Self> {
         Ok(mkfn!("|x: u8| x".into(), |x: u8| x))
     }
 }

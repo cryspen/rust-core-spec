@@ -26,7 +26,8 @@ fn main() {
         helpers::rust_format(&format!(
             "//! This module contains {count} tests, organized in functions.\n{}\n{}\nfn main(){{{}}}", 
             "#![allow(arithmetic_overflow)]
-use core_spec::lifts::*;
+#![allow(unused_parens)]
+#![allow(unused_comparisons)]
 use core_spec::*;
 ",
             helpers::OutKind::VanillaBin.dump(),
