@@ -34,6 +34,11 @@ Running `cargo build` generates the tests under two different formats.
     plain `asserts!`, running them in sequence. No TCB involved
     (e.g. `rustdoc`), just vanilla Rust.
 
+Tests are being generated via `cargo build` using a build script
+located in `build/main.rs` by instantiating the contracts with
+generated test vectors. More information is available in the
+["Contracts" section](#contracts).
+
 Tests can be run in two different ways:
  - `cargo test` will ask `rustdoc` to test all the documentation
 examples from `generated_tests/doc.rs`. The downside is that you need
