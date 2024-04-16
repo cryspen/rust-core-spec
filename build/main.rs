@@ -16,14 +16,14 @@ fn main() {
     let count = helpers::COUNT.lock().unwrap();
     std::fs::write(
         format!("{OUT}/doc.rs"),
-        format!(
+        helpers::rust_format(&format!(
             "//! This module contains placeholder functions decorated with contracts and concrete tests. There are {count} tests.\n{}",
             helpers::OutKind::Rustdoc.dump()
-        ),
+        )),
     ).expect("could not write doc");
     std::fs::write(
         format!("{OUT}/bin.rs"),
-        format!(
+        helpers::rust_format(&format!(
             "//! This module contains {count} tests, organized in functions.\n{}\n{}\nfn main(){{{}}}", 
             "#![allow(arithmetic_overflow)]
 use core_spec::lifts::*;
@@ -35,6 +35,6 @@ use core_spec::*;
                 .map(|r#fn| format!("{}();", r#fn))
                 .collect::<Vec<_>>()
                 .join("\n")
-        ),
+        )),
     ).expect("could not write src");
 }

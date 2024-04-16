@@ -71,6 +71,43 @@ pub fn random<T: for<'a> Arbitrary<'a>>() -> T {
     T::arbitrary(&mut Unstructured::new(raw_data)).unwrap()
 }
 
+pub fn rust_format(contents: &str) -> String {
+    use std::io::Write;
+    use std::process::{Command, Stdio};
+    match Command::new("rustfmt")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+    {
+        Ok(mut fmt) => {
+            write!(fmt.stdin.as_mut().expect("stdin"), "{contents}").unwrap();
+            let out = fmt
+                .wait_with_output()
+                .expect("Failed to get output from `rustfmt`");
+            std::str::from_utf8(&out.stdout).unwrap().to_string()
+        }
+        Err(err) => {
+            eprintln!("Could not run `rustfmt`: {err}.\nReverting to `prettyplease`.");
+            prettyplease::unparse(
+                &syn::parse_str(contents).expect(&format!("Could not parse {contents}")),
+            )
+        }
+    }
+}
+pub fn rust_format_expr(contents: &str) -> String {
+    let contents = rust_format(&format!("fn dummy_fn(){{{}}}", contents));
+    contents
+        .strip_prefix("fn dummy_fn() {")
+        .unwrap()
+        .strip_suffix("}\n")
+        .unwrap()
+        .split("\n")
+        .filter(|line| line.trim() != "")
+        .collect::<Vec<_>>()
+        .join("\n")
+        .into()
+}
+
 #[macro_export]
 macro_rules! tests {
     {
@@ -103,18 +140,6 @@ macro_rules! tests {
                     [format!("pub fn {}{}", FN, "(){}")].into_iter()
                 )
             );
-
-            fn rust_format(contents: &str) -> String {
-                prettyplease::unparse(&syn::parse_str(contents).expect(&format!("Could not parse {contents}")))
-            }
-            fn rust_format_expr(contents: &str) -> String {
-                let contents = rust_format(&format!("fn dummy_fn(){{{}}}", contents));
-                contents
-                    .strip_prefix("fn dummy_fn() {").unwrap()
-                    .strip_suffix("}\n").unwrap()
-                    .split("\n").filter(|line|line.trim() != "")
-                    .collect::<Vec<_>>().join("\n").into()
-            }
 
             {
                 OutKind::VanillaBin.write_prefixed("/// ", $header);
