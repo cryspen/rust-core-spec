@@ -287,135 +287,74 @@ impl<T: PrintRust> PrintRust for Option<T> {
     }
 }
 
-impl PrintRust for u8 {
-    fn print_as_rust(&self) -> String {
-        format!("{}u8", self)
-    }
-    fn print_type() -> String {
-        format!("u8")
-    }
+macro_rules! print_rust_num_lit {
+    ($ty:ident) => {
+        impl PrintRust for $ty {
+            fn print_as_rust(&self) -> String {
+                format!("{}{}", self, stringify!($ty))
+            }
+            fn print_type() -> String {
+                format!("{}", stringify!($ty))
+            }
+        }
+        impl Lift for $ty {
+            type Abstract = BigInt;
+            fn up(self) -> Self::Abstract {
+                BigInt::from(self)
+            }
+            fn down(x: Self::Abstract) -> Self {
+                use num_traits::cast::ToPrimitive;
+                paste::paste! {
+                    x.[<to_ $ty>]().unwrap()
+                }
+            }
+        }
+    };
 }
 
-impl PrintRust for usize {
-    fn print_as_rust(&self) -> String {
-        format!("{}usize", self)
-    }
-    fn print_type() -> String {
-        format!("usize")
-    }
-}
+print_rust_num_lit!(u8);
+print_rust_num_lit!(u16);
+print_rust_num_lit!(u32);
+print_rust_num_lit!(u64);
+print_rust_num_lit!(u128);
+print_rust_num_lit!(usize);
+print_rust_num_lit!(i8);
+print_rust_num_lit!(i16);
+print_rust_num_lit!(i32);
+print_rust_num_lit!(i64);
+print_rust_num_lit!(i128);
+print_rust_num_lit!(isize);
 
-impl PrintRust for i8 {
-    fn print_as_rust(&self) -> String {
-        format!("{}i8", self)
-    }
-    fn print_type() -> String {
-        format!("i8")
-    }
-}
-
-impl Lift for i8 {
-    type Abstract = BigInt;
-    fn up(self) -> Self::Abstract {
-        BigInt::from(self)
-    }
-    fn down(x: Self::Abstract) -> Self {
-        use num_traits::cast::ToPrimitive;
-        x.to_i8().unwrap()
-    }
-}
-
-impl Lift for u8 {
-    type Abstract = BigInt;
-    fn up(self) -> Self::Abstract {
-        BigInt::from(self)
-    }
-    fn down(x: Self::Abstract) -> Self {
-        use num_traits::cast::ToPrimitive;
-        x.to_u8().unwrap()
-    }
-}
-
-impl Lift for u16 {
-    type Abstract = BigInt;
-    fn up(self) -> Self::Abstract {
-        BigInt::from(self)
-    }
-    fn down(x: Self::Abstract) -> Self {
-        use num_traits::cast::ToPrimitive;
-        x.to_u16().unwrap()
-    }
-}
-
-impl Lift for u128 {
-    type Abstract = BigInt;
-    fn up(self) -> Self::Abstract {
-        BigInt::from(self)
-    }
-    fn down(x: Self::Abstract) -> Self {
-        use num_traits::cast::ToPrimitive;
-        x.to_u128().unwrap()
-    }
-}
-impl Lift for i128 {
-    type Abstract = BigInt;
-    fn up(self) -> Self::Abstract {
-        BigInt::from(self)
-    }
-    fn down(x: Self::Abstract) -> Self {
-        use num_traits::cast::ToPrimitive;
-        x.to_i128().unwrap()
-    }
-}
-impl Lift for i64 {
-    type Abstract = BigInt;
-    fn up(self) -> Self::Abstract {
-        BigInt::from(self)
-    }
-    fn down(x: Self::Abstract) -> Self {
-        use num_traits::cast::ToPrimitive;
-        x.to_i64().unwrap()
-    }
-}
-impl Lift for u64 {
-    type Abstract = BigInt;
-    fn up(self) -> Self::Abstract {
-        BigInt::from(self)
-    }
-    fn down(x: Self::Abstract) -> Self {
-        use num_traits::cast::ToPrimitive;
-        x.to_u64().unwrap()
-    }
-}
-impl Lift for i32 {
-    type Abstract = BigInt;
-    fn up(self) -> Self::Abstract {
-        BigInt::from(self)
-    }
-    fn down(x: Self::Abstract) -> Self {
-        use num_traits::cast::ToPrimitive;
-        x.to_i32().unwrap()
-    }
+#[macro_export]
+macro_rules! catch_unwind_set_hook {
+    ($f:expr) => {{
+        use std::panic;
+        let previous_hook = panic::take_hook();
+        panic::set_hook(Box::new(|_| {}));
+        let result = panic::catch_unwind($f);
+        panic::set_hook(previous_hook);
+        result
+    }};
 }
 
 #[macro_export]
 macro_rules! doesn_t_panic {
     ($e:expr) => {
-        std::panic::catch_unwind(|| $e).is_ok()
+        catch_unwind_set_hook!(|| $e).is_ok()
     };
 }
 
 #[macro_export]
 macro_rules! panics {
     ($e:expr) => {
-        std::panic::catch_unwind(|| $e).is_err()
+        catch_unwind_set_hook!(|| $e).is_err()
     };
 }
 
 #[macro_export]
 macro_rules! catch_panic {
     ($e:expr) => {
-        std::panic::catch_unwind(|| $e).ok()
+        catch_unwind_set_hook!(|| $e).ok()
     };
 }
 
