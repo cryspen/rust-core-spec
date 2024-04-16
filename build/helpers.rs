@@ -3,12 +3,54 @@ use once_cell::sync::Lazy;
 use rand::RngCore;
 use std::sync::Mutex;
 
-pub static OUTPUT: Lazy<Mutex<Vec<String>>> = Lazy::new(|| {
-    Mutex::new(vec![
-        "//! This module contains placeholder functions decorated with contracts and concrete tests."
-            .into(),
-    ])
-});
+#[derive(Copy, Clone, Eq, PartialEq)]
+pub enum OutKind {
+    Rustdoc,
+    VanillaBin,
+}
+pub static COUNT: Lazy<Mutex<usize>> = Lazy::new(|| Mutex::new(0));
+pub static FUNCTIONS: Lazy<Mutex<Vec<String>>> = Lazy::new(|| Mutex::new(vec![]));
+pub fn register_function(r#fn: &str) {
+    FUNCTIONS.lock().unwrap().push(r#fn.into());
+}
+pub fn list_functions() -> Vec<String> {
+    FUNCTIONS.lock().unwrap().clone()
+}
+
+const _: () = {
+    static OUTPUT: Lazy<Mutex<Vec<(OutKind, String)>>> = Lazy::new(|| Mutex::new(vec![]));
+
+    impl OutKind {
+        pub fn write<S: Into<String>>(self, line: S) {
+            OUTPUT.lock().unwrap().push((self, line.into()));
+        }
+        pub fn write_lines<S: Into<String>>(self, lines: impl Iterator<Item = S>) {
+            OUTPUT
+                .lock()
+                .unwrap()
+                .extend(lines.map(|x| (self, x.into())));
+        }
+        pub fn write_prefixed<S: Into<String>>(self, prefix: &str, line: S) {
+            let line: String = line.into();
+            self.write_lines(
+                line.trim()
+                    .split("\n")
+                    .map(|line| format!("{prefix} {line}")),
+            );
+        }
+        pub fn dump(self) -> String {
+            OUTPUT
+                .lock()
+                .unwrap()
+                .iter()
+                .filter(|(k, _)| *k == self)
+                .map(|(_, line)| line)
+                .cloned()
+                .collect::<Vec<_>>()
+                .join("\n")
+        }
+    }
+};
 
 pub trait Random {
     fn random() -> Self;
@@ -30,26 +72,51 @@ pub fn random<T: for<'a> Arbitrary<'a>>() -> T {
 #[macro_export]
 macro_rules! tests {
     {
-        header: $header:literal,
+        header: $header:expr,
         ident: $ident:ident,
         $(contract! $contract:tt),*
             $(,)?
     } => {
         {
+            let contracts: Vec<RenderedContract> = vec![$({$crate::contract! $contract make_doc()}),*];
+
             let doc = {
                 let mut docstr = String::new();
                 docstr += &format!("# {}\n", $header);
-                $({
-                    $crate::contract! $contract
-                    docstr += &format!("{}\n", make_doc());
-                };)*
+                docstr += &contracts.iter().map(|RenderedContract {header, asserts}| format!("{}```
+# use core_spec::lifts::*;
+# use core_spec::*;
+# #[allow(arithmetic_overflow)] {{
+{asserts}
+# }}
+```", header)).collect::<Vec<_>>().join("\n");
                 docstr
             };
-            OUTPUT.lock().unwrap().extend(
+
+            const FN: &str = stringify!($ident);
+            register_function(FN);
+
+            OutKind::Rustdoc.write_lines(
                 doc.trim().split("\n").map(|line| format!("/// {line}")).chain(
-                    [format!("pub fn {}{}", stringify!($ident), "(){}")].into_iter()
+                    [format!("pub fn {}{}", FN, "(){}")].into_iter()
                 )
             );
+
+            {
+                OutKind::VanillaBin.write_prefixed("///", $header);
+                OutKind::VanillaBin.write(format!("pub fn {}{}", FN, "(){"));
+                OutKind::VanillaBin.write(format!(r##"eprintln!(r#"Testing "{}"... ({} contracts)"#);"##, $header, contracts.len()));
+                OutKind::VanillaBin.write(format!(r##"eprint!(r#"  "#);"##));
+                for RenderedContract {header, asserts} in contracts.iter() {
+                    OutKind::VanillaBin.write_prefixed("//", header);
+                    OutKind::VanillaBin.write("{");
+                    OutKind::VanillaBin.write(asserts);
+                    OutKind::VanillaBin.write("}");
+                    OutKind::VanillaBin.write(format!(r##"eprint!(r#"... "#);"##));
+                }
+                OutKind::VanillaBin.write(r#"eprintln!("✓\n");"#);
+                OutKind::VanillaBin.write("}");
+            }
         }
     }
 }
@@ -64,10 +131,15 @@ macro_rules! default_value {
     };
 }
 
+pub struct RenderedContract {
+    pub header: String,
+    pub asserts: String,
+}
+
 #[macro_export]
 macro_rules! contract {
     {
-        header: $header:literal,
+        header: $header:expr,
         inputs: $(<$tinput:ident>)?[$($input:ident : $input_ty:ty),*],
         precondition: $pre_body: expr,
         postcondition: $post_body:expr
@@ -76,7 +148,7 @@ macro_rules! contract {
         $(,)?
     } => {
         #[allow(unused)]
-        fn make_doc() -> String {
+        fn make_doc() -> RenderedContract {
             use $crate::lifts::*;
             fn pre<$($tinput:Clone + PrintRust + core::fmt::Debug)?>($($input: $input_ty),*) -> bool {
                 $pre_body
@@ -116,17 +188,15 @@ macro_rules! contract {
             if(test_vector.len() != n) {
                 panic!("\n\nCould not find enough examples\n\n");
             }
+            *COUNT.lock().unwrap() += test_vector.len();
             let asserts = test_vector.into_iter().map(
                 |($($input),*)|
                 format!("assert!({});", post($($input),*))
             ).collect::<Vec<_>>().join("\n");
-            format!("{}```
-# use core_spec::lifts::*;
-# use core_spec::*;
-# #[allow(arithmetic_overflow)] {}
-{asserts}
-# {}
-```", make_doc(), "{", "}")
+            RenderedContract {
+                header: make_doc(),
+                asserts,
+            }
         }
     }
 }

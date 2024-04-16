@@ -9,10 +9,34 @@ mod lifts;
 #[path = "../src/specs/mod.rs"]
 mod specs;
 
+fn rust_format(contents: &str) -> String {
+    prettyplease::unparse(&syn::parse_str(contents).expect(&format!("Could not parse {contents}")))
+}
+
 fn main() {
     specs::specs();
-    let _ = std::fs::write(
-        "src/generated.rs",
-        helpers::OUTPUT.lock().unwrap().join("\n"),
+    let count = helpers::COUNT.lock().unwrap();
+    std::fs::write(
+        "src/generated_doc.rs",
+        format!(
+            "//! This module contains placeholder functions decorated with contracts and concrete tests. There are {count} tests.\n{}",
+            helpers::OutKind::Rustdoc.dump()
+        ),
+    );
+    std::fs::write(
+        "src/test_driver.rs",
+        rust_format(&format!(
+            "//! This module contains {count} tests, organized in functions.\n{}\n{}\nfn main(){{{}}}", 
+            "#![allow(arithmetic_overflow)]
+use core_spec::lifts::*;
+use core_spec::*;
+",
+            helpers::OutKind::VanillaBin.dump(),
+            helpers::list_functions()
+                .iter()
+                .map(|r#fn| format!("{}();", r#fn))
+                .collect::<Vec<_>>()
+                .join("\n")
+        )),
     );
 }
