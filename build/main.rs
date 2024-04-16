@@ -9,18 +9,20 @@ mod lifts;
 #[path = "../src/specs/mod.rs"]
 mod specs;
 
+const OUT: &str = "generated_tests";
+
 fn main() {
     specs::specs();
     let count = helpers::COUNT.lock().unwrap();
     std::fs::write(
-        "src/generated_doc.rs",
+        format!("{OUT}/doc.rs"),
         format!(
             "//! This module contains placeholder functions decorated with contracts and concrete tests. There are {count} tests.\n{}",
             helpers::OutKind::Rustdoc.dump()
         ),
-    );
+    ).expect("could not write doc");
     std::fs::write(
-        "src/test_driver.rs",
+        format!("{OUT}/bin.rs"),
         format!(
             "//! This module contains {count} tests, organized in functions.\n{}\n{}\nfn main(){{{}}}", 
             "#![allow(arithmetic_overflow)]
@@ -34,5 +36,5 @@ use core_spec::*;
                 .collect::<Vec<_>>()
                 .join("\n")
         ),
-    );
+    ).expect("could not write src");
 }

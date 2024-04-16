@@ -9,9 +9,7 @@ build = "build/main.rs"
 
 [[bin]]
 name = "rust-core-spec-tests"
-path = "src/test_driver.rs"
-
-
+path = "generated_tests/bin.rs"
 
 [build-dependencies]
 rand = "0.8.5"

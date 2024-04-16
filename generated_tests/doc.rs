@@ -27,23 +27,23 @@
 ///             Some(_) => true,
 ///             None => false,
 ///         }));
-/// assert!(Some(31u8).is_some()
-///         == (match Some(31u8) {
+/// assert!(Some(101u8).is_some()
+///         == (match Some(101u8) {
 ///             Some(_) => true,
 ///             None => false,
 ///         }));
-/// assert!(Some(119u8).is_some()
-///         == (match Some(119u8) {
+/// assert!(Some(91u8).is_some()
+///         == (match Some(91u8) {
 ///             Some(_) => true,
 ///             None => false,
 ///         }));
-/// assert!(Some(27u8).is_some()
-///         == (match Some(27u8) {
+/// assert!(Some(82u8).is_some()
+///         == (match Some(82u8) {
 ///             Some(_) => true,
 ///             None => false,
 ///         }));
-/// assert!(Some(38u8).is_some()
-///         == (match Some(38u8) {
+/// assert!(Some(26u8).is_some()
+///         == (match Some(26u8) {
 ///             Some(_) => true,
 ///             None => false,
 ///         }));
@@ -78,23 +78,23 @@ pub fn option_is_some(){}
 ///             Some(_) => false,
 ///             None => true,
 ///         }));
-/// assert!(Some(252u8).is_none()
-///         == (match Some(252u8) {
+/// assert!(Some(206u8).is_none()
+///         == (match Some(206u8) {
 ///             Some(_) => false,
 ///             None => true,
 ///         }));
-/// assert!(Some(77u8).is_none()
-///         == (match Some(77u8) {
+/// assert!(Some(174u8).is_none()
+///         == (match Some(174u8) {
 ///             Some(_) => false,
 ///             None => true,
 ///         }));
-/// assert!(Some(89u8).is_none()
-///         == (match Some(89u8) {
+/// assert!(Some(213u8).is_none()
+///         == (match Some(213u8) {
 ///             Some(_) => false,
 ///             None => true,
 ///         }));
-/// assert!(Some(83u8).is_none()
-///         == (match Some(83u8) {
+/// assert!(Some(189u8).is_none()
+///         == (match Some(189u8) {
 ///             Some(_) => false,
 ///             None => true,
 ///         }));
@@ -123,11 +123,11 @@ pub fn option_is_none(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(doesn_t_panic!(Some(0u8).expect("message")));
 /// assert!(doesn_t_panic!(Some(255u8).expect("message")));
-/// assert!(doesn_t_panic!(Some(81u8).expect("message")));
-/// assert!(doesn_t_panic!(Some(21u8).expect("message")));
-/// assert!(doesn_t_panic!(Some(29u8).expect("message")));
-/// assert!(doesn_t_panic!(Some(156u8).expect("message")));
-/// assert!(doesn_t_panic!(Some(107u8).expect("message")));
+/// assert!(doesn_t_panic!(Some(9u8).expect("message")));
+/// assert!(doesn_t_panic!(Some(105u8).expect("message")));
+/// assert!(doesn_t_panic!(Some(212u8).expect("message")));
+/// assert!(doesn_t_panic!(Some(227u8).expect("message")));
+/// assert!(doesn_t_panic!(Some(128u8).expect("message")));
 /// # }
 /// ```
 /// ## Wrapping a value in a `Some` and unwrapping is identity
@@ -140,11 +140,11 @@ pub fn option_is_none(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(Some(0u8).unwrap() == 0u8);
 /// assert!(Some(255u8).unwrap() == 255u8);
-/// assert!(Some(155u8).unwrap() == 155u8);
-/// assert!(Some(199u8).unwrap() == 199u8);
-/// assert!(Some(119u8).unwrap() == 119u8);
-/// assert!(Some(139u8).unwrap() == 139u8);
-/// assert!(Some(78u8).unwrap() == 78u8);
+/// assert!(Some(200u8).unwrap() == 200u8);
+/// assert!(Some(9u8).unwrap() == 9u8);
+/// assert!(Some(160u8).unwrap() == 160u8);
+/// assert!(Some(3u8).unwrap() == 3u8);
+/// assert!(Some(190u8).unwrap() == 190u8);
 /// # }
 /// ```
 pub fn option_expect(){}
@@ -169,7 +169,7 @@ pub fn option_expect(){}
 ///         == Some(((|x: u8| x.wrapping_add(0u8)))(255u8)));
 /// assert!(Some(255u8).map((|x: u8| x.wrapping_add(255u8)))
 ///         == Some(((|x: u8| x.wrapping_add(255u8)))(255u8)));
-/// assert!(Some(26u8).map((|x: u8| x)) == Some(((|x: u8| x))(26u8)));
+/// assert!(Some(151u8).map((|x: u8| x)) == Some(((|x: u8| x))(151u8)));
 /// # }
 /// ```
 /// ## Mapping a `None` is the identity
@@ -197,9 +197,9 @@ pub fn option_map(){}
 /// assert!(Some(0u8).filter((|x: &u8| *x < 255u8)).is_some() == (|x: &u8| *x < 255u8)(&0u8));
 /// assert!(Some(255u8).filter((|x: &u8| *x < 0u8)).is_some() == (|x: &u8| *x < 0u8)(&255u8));
 /// assert!(Some(255u8).filter((|x: &u8| *x < 255u8)).is_some() == (|x: &u8| *x < 255u8)(&255u8));
-/// assert!(Some(102u8).filter((|x: &u8| *x > 128)).is_some() == (|x: &u8| *x > 128)(&102u8));
-/// assert!(Some(128u8).filter((|x: &u8| *x > 128)).is_some() == (|x: &u8| *x > 128)(&128u8));
-/// assert!(Some(32u8).filter((|x: &u8| *x > 128)).is_some() == (|x: &u8| *x > 128)(&32u8));
+/// assert!(Some(90u8).filter((|x: &u8| *x > 128)).is_some() == (|x: &u8| *x > 128)(&90u8));
+/// assert!(Some(243u8).filter((|x: &u8| *x > 128)).is_some() == (|x: &u8| *x > 128)(&243u8));
+/// assert!(Some(178u8).filter((|x: &u8| *x > 128)).is_some() == (|x: &u8| *x > 128)(&178u8));
 /// # }
 /// ```
 /// ## Filtering a `None` is the identity
@@ -225,11 +225,11 @@ pub fn option_filter(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(Some(Some(0u8)).flatten() == Some(0u8));
 /// assert!(Some(Some(255u8)).flatten() == Some(255u8));
-/// assert!(Some(Some(172u8)).flatten() == Some(172u8));
-/// assert!(Some(Some(158u8)).flatten() == Some(158u8));
-/// assert!(Some(Some(67u8)).flatten() == Some(67u8));
-/// assert!(Some(Some(35u8)).flatten() == Some(35u8));
-/// assert!(Some(Some(225u8)).flatten() == Some(225u8));
+/// assert!(Some(Some(6u8)).flatten() == Some(6u8));
+/// assert!(Some(Some(85u8)).flatten() == Some(85u8));
+/// assert!(Some(Some(246u8)).flatten() == Some(246u8));
+/// assert!(Some(Some(223u8)).flatten() == Some(223u8));
+/// assert!(Some(Some(130u8)).flatten() == Some(130u8));
 /// # }
 /// ```
 /// ## Nested or direct `None` flattens to None
@@ -270,20 +270,20 @@ pub fn option_flatten(){}
 ///         y.take() == Some(255u8) && y.is_none()
 ///     });
 /// assert!({
-///         let mut y = Some(5u8).clone();
-///         y.take() == Some(5u8) && y.is_none()
+///         let mut y = Some(110u8).clone();
+///         y.take() == Some(110u8) && y.is_none()
 ///     });
 /// assert!({
-///         let mut y = Some(151u8).clone();
-///         y.take() == Some(151u8) && y.is_none()
+///         let mut y = Some(54u8).clone();
+///         y.take() == Some(54u8) && y.is_none()
 ///     });
 /// assert!({
-///         let mut y = Some(148u8).clone();
-///         y.take() == Some(148u8) && y.is_none()
+///         let mut y = Some(6u8).clone();
+///         y.take() == Some(6u8) && y.is_none()
 ///     });
 /// assert!({
-///         let mut y = Some(80u8).clone();
-///         y.take() == Some(80u8) && y.is_none()
+///         let mut y = Some(203u8).clone();
+///         y.take() == Some(203u8) && y.is_none()
 ///     });
 /// # }
 /// ```
@@ -301,9 +301,9 @@ pub fn option_take(){}
 /// assert!(Some(0u8).zip(Some(255u8)) == Some((0u8, 255u8)));
 /// assert!(Some(255u8).zip(Some(0u8)) == Some((255u8, 0u8)));
 /// assert!(Some(255u8).zip(Some(255u8)) == Some((255u8, 255u8)));
-/// assert!(Some(97u8).zip(Some(121u8)) == Some((97u8, 121u8)));
-/// assert!(Some(4u8).zip(Some(195u8)) == Some((4u8, 195u8)));
-/// assert!(Some(246u8).zip(Some(8u8)) == Some((246u8, 8u8)));
+/// assert!(Some(40u8).zip(Some(206u8)) == Some((40u8, 206u8)));
+/// assert!(Some(168u8).zip(Some(21u8)) == Some((168u8, 21u8)));
+/// assert!(Some(201u8).zip(Some(62u8)) == Some((201u8, 62u8)));
 /// # }
 /// ```
 /// ## Zipping two options when one is a `None` makes `None`
@@ -319,8 +319,8 @@ pub fn option_take(){}
 /// assert!(Option::<u8>::None.zip(Some(255u8)).is_none());
 /// assert!(Some(0u8).zip(Option::<u8>::None).is_none());
 /// assert!(Some(255u8).zip(Option::<u8>::None).is_none());
-/// assert!(Option::<u8>::None.zip(Some(61u8)).is_none());
-/// assert!(Option::<u8>::None.zip(Some(101u8)).is_none());
+/// assert!(Option::<u8>::None.zip(Some(232u8)).is_none());
+/// assert!(Option::<u8>::None.zip(Some(100u8)).is_none());
 /// # }
 /// ```
 pub fn option_zip(){}
@@ -346,11 +346,11 @@ pub fn option_zip(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(doesn_t_panic!(Some(0u8).unwrap()));
 /// assert!(doesn_t_panic!(Some(255u8).unwrap()));
-/// assert!(doesn_t_panic!(Some(114u8).unwrap()));
-/// assert!(doesn_t_panic!(Some(117u8).unwrap()));
-/// assert!(doesn_t_panic!(Some(100u8).unwrap()));
-/// assert!(doesn_t_panic!(Some(181u8).unwrap()));
-/// assert!(doesn_t_panic!(Some(220u8).unwrap()));
+/// assert!(doesn_t_panic!(Some(28u8).unwrap()));
+/// assert!(doesn_t_panic!(Some(138u8).unwrap()));
+/// assert!(doesn_t_panic!(Some(241u8).unwrap()));
+/// assert!(doesn_t_panic!(Some(41u8).unwrap()));
+/// assert!(doesn_t_panic!(Some(144u8).unwrap()));
 /// # }
 /// ```
 pub fn option_unwrap(){}
@@ -373,32 +373,32 @@ pub fn option_unwrap(){}
 ///         v_mut.unwrap() == v_unwrapped + 10
 ///     });
 /// assert!({
+///         let (v_unwrapped, mut v_mut) = (Some(38u8).unwrap().clone(), Some(38u8));
+///         *v_mut.as_mut().unwrap() += 10;
+///         v_mut.unwrap() == v_unwrapped + 10
+///     });
+/// assert!({
+///         let (v_unwrapped, mut v_mut) = (Some(5u8).unwrap().clone(), Some(5u8));
+///         *v_mut.as_mut().unwrap() += 10;
+///         v_mut.unwrap() == v_unwrapped + 10
+///     });
+/// assert!({
 ///         let (v_unwrapped, mut v_mut) = (Some(18u8).unwrap().clone(), Some(18u8));
 ///         *v_mut.as_mut().unwrap() += 10;
 ///         v_mut.unwrap() == v_unwrapped + 10
 ///     });
 /// assert!({
-///         let (v_unwrapped, mut v_mut) = (Some(1u8).unwrap().clone(), Some(1u8));
+///         let (v_unwrapped, mut v_mut) = (Some(21u8).unwrap().clone(), Some(21u8));
 ///         *v_mut.as_mut().unwrap() += 10;
 ///         v_mut.unwrap() == v_unwrapped + 10
 ///     });
 /// assert!({
-///         let (v_unwrapped, mut v_mut) = (Some(28u8).unwrap().clone(), Some(28u8));
+///         let (v_unwrapped, mut v_mut) = (Some(29u8).unwrap().clone(), Some(29u8));
 ///         *v_mut.as_mut().unwrap() += 10;
 ///         v_mut.unwrap() == v_unwrapped + 10
 ///     });
 /// assert!({
-///         let (v_unwrapped, mut v_mut) = (Some(48u8).unwrap().clone(), Some(48u8));
-///         *v_mut.as_mut().unwrap() += 10;
-///         v_mut.unwrap() == v_unwrapped + 10
-///     });
-/// assert!({
-///         let (v_unwrapped, mut v_mut) = (Some(46u8).unwrap().clone(), Some(46u8));
-///         *v_mut.as_mut().unwrap() += 10;
-///         v_mut.unwrap() == v_unwrapped + 10
-///     });
-/// assert!({
-///         let (v_unwrapped, mut v_mut) = (Some(35u8).unwrap().clone(), Some(35u8));
+///         let (v_unwrapped, mut v_mut) = (Some(9u8).unwrap().clone(), Some(9u8));
 ///         *v_mut.as_mut().unwrap() += 10;
 ///         v_mut.unwrap() == v_unwrapped + 10
 ///     });
@@ -427,11 +427,11 @@ pub fn option_as_mut(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!({ Some(0u8).as_slice() == [0u8] });
 /// assert!({ Some(255u8).as_slice() == [255u8] });
-/// assert!({ Some(51u8).as_slice() == [51u8] });
-/// assert!({ Some(109u8).as_slice() == [109u8] });
-/// assert!({ Some(20u8).as_slice() == [20u8] });
-/// assert!({ Some(247u8).as_slice() == [247u8] });
-/// assert!({ Some(100u8).as_slice() == [100u8] });
+/// assert!({ Some(42u8).as_slice() == [42u8] });
+/// assert!({ Some(114u8).as_slice() == [114u8] });
+/// assert!({ Some(173u8).as_slice() == [173u8] });
+/// assert!({ Some(85u8).as_slice() == [85u8] });
+/// assert!({ Some(102u8).as_slice() == [102u8] });
 /// # }
 /// ```
 pub fn option_as_slice(){}
@@ -448,9 +448,9 @@ pub fn option_as_slice(){}
 /// assert!(vec![0u8].get(0usize) == Some(&0u8));
 /// assert!(vec![255u8].get(0usize) == Some(&255u8));
 /// assert!(vec![255u8].get(0usize) == Some(&255u8));
-/// assert!(vec![204u8, 74u8].get(1usize) == Some(&74u8));
-/// assert!(vec![195u8].get(0usize) == Some(&195u8));
-/// assert!(vec![130u8, 238u8, 166u8].get(0usize) == Some(&130u8));
+/// assert!(vec![247u8].get(0usize) == Some(&247u8));
+/// assert!(vec![119u8, 184u8, 198u8].get(0usize) == Some(&119u8));
+/// assert!(vec![196u8, 196u8].get(1usize) == Some(&196u8));
 /// # }
 /// ```
 pub fn slice_get(){}
@@ -469,7 +469,7 @@ pub fn slice_get(){}
 /// assert!(0i8 - 127i8 == -127i8);
 /// assert!(127i8 - 0i8 == 127i8);
 /// assert!(127i8 - 127i8 == 0i8);
-/// assert!(-48i8 - -110i8 == 62i8);
+/// assert!(-10i8 - -79i8 == 69i8);
 /// # }
 /// ```
 /// ## Overflowing subtraction panics
@@ -483,10 +483,10 @@ pub fn slice_get(){}
 /// assert!(panics!(- 128i8 - 127i8));
 /// assert!(panics!(0i8 - - 128i8));
 /// assert!(panics!(127i8 - - 128i8));
-/// assert!(panics!(- 125i8 - 53i8));
-/// assert!(panics!(- 107i8 - 100i8));
-/// assert!(panics!(127i8 - - 87i8));
-/// assert!(panics!(- 48i8 - 122i8));
+/// assert!(panics!(39i8 - - 112i8));
+/// assert!(panics!(- 69i8 - 124i8));
+/// assert!(panics!(119i8 - - 71i8));
+/// assert!(panics!(101i8 - - 123i8));
 /// # }
 /// ```
 pub fn core_ops_sub_i8_sub(){}
@@ -518,11 +518,11 @@ pub fn core_ops_sub_i8_sub(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(panics!(- 128i8 + - 128i8));
 /// assert!(panics!(127i8 + 127i8));
-/// assert!(panics!(118i8 + 68i8));
-/// assert!(panics!(- 50i8 + - 79i8));
-/// assert!(panics!(94i8 + 109i8));
-/// assert!(panics!(121i8 + 65i8));
-/// assert!(panics!(107i8 + 75i8));
+/// assert!(panics!(83i8 + 58i8));
+/// assert!(panics!(- 78i8 + - 100i8));
+/// assert!(panics!(- 48i8 + - 82i8));
+/// assert!(panics!(- 109i8 + - 65i8));
+/// assert!(panics!(84i8 + 53i8));
 /// # }
 /// ```
 pub fn core_ops_add_i8_add(){}
@@ -538,10 +538,10 @@ pub fn core_ops_add_i8_add(){}
 /// assert!(0u8 + 0u8 == 0u8);
 /// assert!(0u8 + 255u8 == 255u8);
 /// assert!(255u8 + 0u8 == 255u8);
-/// assert!(97u8 + 35u8 == 132u8);
-/// assert!(133u8 + 32u8 == 165u8);
-/// assert!(62u8 + 116u8 == 178u8);
-/// assert!(106u8 + 94u8 == 200u8);
+/// assert!(36u8 + 38u8 == 74u8);
+/// assert!(150u8 + 56u8 == 206u8);
+/// assert!(17u8 + 171u8 == 188u8);
+/// assert!(102u8 + 13u8 == 115u8);
 /// # }
 /// ```
 /// ## Panics when overflowing
@@ -553,10 +553,10 @@ pub fn core_ops_add_i8_add(){}
 /// # use core_spec::*;
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(panics!(255u8 + 255u8));
-/// assert!(panics!(244u8 + 72u8));
-/// assert!(panics!(82u8 + 214u8));
-/// assert!(panics!(210u8 + 191u8));
-/// assert!(panics!(214u8 + 144u8));
+/// assert!(panics!(195u8 + 251u8));
+/// assert!(panics!(199u8 + 71u8));
+/// assert!(panics!(212u8 + 237u8));
+/// assert!(panics!(61u8 + 253u8));
 /// # }
 /// ```
 /// ## Commutativity
@@ -570,10 +570,10 @@ pub fn core_ops_add_i8_add(){}
 /// assert!(0u8 + 0u8 == 0u8 + 0u8);
 /// assert!(0u8 + 255u8 == 255u8 + 0u8);
 /// assert!(255u8 + 0u8 == 0u8 + 255u8);
-/// assert!(71u8 + 75u8 == 75u8 + 71u8);
-/// assert!(83u8 + 71u8 == 71u8 + 83u8);
-/// assert!(88u8 + 35u8 == 35u8 + 88u8);
-/// assert!(25u8 + 144u8 == 144u8 + 25u8);
+/// assert!(196u8 + 44u8 == 44u8 + 196u8);
+/// assert!(3u8 + 163u8 == 163u8 + 3u8);
+/// assert!(14u8 + 233u8 == 233u8 + 14u8);
+/// assert!(145u8 + 5u8 == 5u8 + 145u8);
 /// # }
 /// ```
 /// ## Left identity
@@ -586,11 +586,11 @@ pub fn core_ops_add_i8_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0u8 + 0 == 0u8);
 /// assert!(255u8 + 0 == 255u8);
-/// assert!(133u8 + 0 == 133u8);
-/// assert!(94u8 + 0 == 94u8);
-/// assert!(156u8 + 0 == 156u8);
-/// assert!(3u8 + 0 == 3u8);
-/// assert!(84u8 + 0 == 84u8);
+/// assert!(6u8 + 0 == 6u8);
+/// assert!(78u8 + 0 == 78u8);
+/// assert!(148u8 + 0 == 148u8);
+/// assert!(83u8 + 0 == 83u8);
+/// assert!(63u8 + 0 == 63u8);
 /// # }
 /// ```
 /// ## Right identity
@@ -603,11 +603,11 @@ pub fn core_ops_add_i8_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0 + 0u8 == 0u8);
 /// assert!(0 + 255u8 == 255u8);
-/// assert!(0 + 148u8 == 148u8);
-/// assert!(0 + 160u8 == 160u8);
-/// assert!(0 + 198u8 == 198u8);
-/// assert!(0 + 78u8 == 78u8);
-/// assert!(0 + 12u8 == 12u8);
+/// assert!(0 + 220u8 == 220u8);
+/// assert!(0 + 187u8 == 187u8);
+/// assert!(0 + 85u8 == 85u8);
+/// assert!(0 + 60u8 == 60u8);
+/// assert!(0 + 227u8 == 227u8);
 /// # }
 /// ```
 /// ## Associativity
@@ -622,9 +622,9 @@ pub fn core_ops_add_i8_add(){}
 /// assert!((0u8 + 0u8) + 255u8 == 0u8 + (0u8 + 255u8));
 /// assert!((0u8 + 255u8) + 0u8 == 0u8 + (255u8 + 0u8));
 /// assert!((255u8 + 0u8) + 0u8 == 255u8 + (0u8 + 0u8));
-/// assert!((160u8 + 0u8) + 9u8 == 160u8 + (0u8 + 9u8));
-/// assert!((60u8 + 5u8) + 120u8 == 60u8 + (5u8 + 120u8));
-/// assert!((109u8 + 19u8) + 61u8 == 109u8 + (19u8 + 61u8));
+/// assert!((10u8 + 135u8) + 103u8 == 10u8 + (135u8 + 103u8));
+/// assert!((21u8 + 93u8) + 102u8 == 21u8 + (93u8 + 102u8));
+/// assert!((189u8 + 18u8) + 7u8 == 189u8 + (18u8 + 7u8));
 /// # }
 /// ```
 pub fn core_ops_add_u8_add(){}
@@ -640,10 +640,10 @@ pub fn core_ops_add_u8_add(){}
 /// assert!(0u8.checked_add(0u8) == Some(0u8));
 /// assert!(0u8.checked_add(255u8) == Some(255u8));
 /// assert!(255u8.checked_add(0u8) == Some(255u8));
-/// assert!(142u8.checked_add(31u8) == Some(173u8));
-/// assert!(3u8.checked_add(178u8) == Some(181u8));
-/// assert!(35u8.checked_add(220u8) == Some(255u8));
-/// assert!(153u8.checked_add(86u8) == Some(239u8));
+/// assert!(41u8.checked_add(165u8) == Some(206u8));
+/// assert!(28u8.checked_add(45u8) == Some(73u8));
+/// assert!(30u8.checked_add(94u8) == Some(124u8));
+/// assert!(10u8.checked_add(230u8) == Some(240u8));
 /// # }
 /// ```
 /// ## None when overflowing
@@ -655,10 +655,10 @@ pub fn core_ops_add_u8_add(){}
 /// # use core_spec::*;
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(255u8.checked_add(255u8) == None);
-/// assert!(167u8.checked_add(126u8) == None);
-/// assert!(132u8.checked_add(191u8) == None);
-/// assert!(139u8.checked_add(202u8) == None);
-/// assert!(129u8.checked_add(233u8) == None);
+/// assert!(132u8.checked_add(138u8) == None);
+/// assert!(39u8.checked_add(237u8) == None);
+/// assert!(248u8.checked_add(91u8) == None);
+/// assert!(182u8.checked_add(133u8) == None);
 /// # }
 /// ```
 /// ## Commutativity
@@ -673,9 +673,9 @@ pub fn core_ops_add_u8_add(){}
 /// assert!(0u8.checked_add(255u8) == 255u8.checked_add(0u8));
 /// assert!(255u8.checked_add(0u8) == 0u8.checked_add(255u8));
 /// assert!(255u8.checked_add(255u8) == 255u8.checked_add(255u8));
-/// assert!(187u8.checked_add(60u8) == 60u8.checked_add(187u8));
-/// assert!(240u8.checked_add(135u8) == 135u8.checked_add(240u8));
-/// assert!(131u8.checked_add(21u8) == 21u8.checked_add(131u8));
+/// assert!(223u8.checked_add(150u8) == 150u8.checked_add(223u8));
+/// assert!(172u8.checked_add(201u8) == 201u8.checked_add(172u8));
+/// assert!(93u8.checked_add(169u8) == 169u8.checked_add(93u8));
 /// # }
 /// ```
 /// ## Left identity
@@ -688,11 +688,11 @@ pub fn core_ops_add_u8_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0u8.checked_add(0u8) == Some(0u8));
 /// assert!(255u8.checked_add(0u8) == Some(255u8));
-/// assert!(53u8.checked_add(0u8) == Some(53u8));
-/// assert!(28u8.checked_add(0u8) == Some(28u8));
-/// assert!(203u8.checked_add(0u8) == Some(203u8));
-/// assert!(23u8.checked_add(0u8) == Some(23u8));
-/// assert!(235u8.checked_add(0u8) == Some(235u8));
+/// assert!(6u8.checked_add(0u8) == Some(6u8));
+/// assert!(245u8.checked_add(0u8) == Some(245u8));
+/// assert!(56u8.checked_add(0u8) == Some(56u8));
+/// assert!(187u8.checked_add(0u8) == Some(187u8));
+/// assert!(43u8.checked_add(0u8) == Some(43u8));
 /// # }
 /// ```
 /// ## Right identity
@@ -705,11 +705,11 @@ pub fn core_ops_add_u8_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0u8.checked_add(0u8) == Some(0u8));
 /// assert!(0u8.checked_add(255u8) == Some(255u8));
-/// assert!(0u8.checked_add(98u8) == Some(98u8));
-/// assert!(0u8.checked_add(69u8) == Some(69u8));
-/// assert!(0u8.checked_add(72u8) == Some(72u8));
-/// assert!(0u8.checked_add(37u8) == Some(37u8));
-/// assert!(0u8.checked_add(233u8) == Some(233u8));
+/// assert!(0u8.checked_add(205u8) == Some(205u8));
+/// assert!(0u8.checked_add(178u8) == Some(178u8));
+/// assert!(0u8.checked_add(106u8) == Some(106u8));
+/// assert!(0u8.checked_add(168u8) == Some(168u8));
+/// assert!(0u8.checked_add(166u8) == Some(166u8));
 /// # }
 /// ```
 /// ## Associativity
@@ -750,10 +750,10 @@ pub fn core_ops_add_u8_checked_add(){}
 /// assert!(0u16 + 0u16 == 0u16);
 /// assert!(0u16 + 65535u16 == 65535u16);
 /// assert!(65535u16 + 0u16 == 65535u16);
-/// assert!(13595u16 + 4718u16 == 18313u16);
-/// assert!(22118u16 + 25876u16 == 47994u16);
-/// assert!(5887u16 + 17205u16 == 23092u16);
-/// assert!(48785u16 + 12775u16 == 61560u16);
+/// assert!(4657u16 + 57252u16 == 61909u16);
+/// assert!(7938u16 + 6618u16 == 14556u16);
+/// assert!(8220u16 + 26649u16 == 34869u16);
+/// assert!(10159u16 + 7144u16 == 17303u16);
 /// # }
 /// ```
 /// ## Panics when overflowing
@@ -765,10 +765,10 @@ pub fn core_ops_add_u8_checked_add(){}
 /// # use core_spec::*;
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(panics!(65535u16 + 65535u16));
-/// assert!(panics!(56401u16 + 12362u16));
-/// assert!(panics!(45218u16 + 43577u16));
-/// assert!(panics!(65146u16 + 6104u16));
-/// assert!(panics!(65131u16 + 25049u16));
+/// assert!(panics!(31015u16 + 63879u16));
+/// assert!(panics!(65430u16 + 33748u16));
+/// assert!(panics!(29937u16 + 61359u16));
+/// assert!(panics!(55869u16 + 27303u16));
 /// # }
 /// ```
 /// ## Commutativity
@@ -782,10 +782,10 @@ pub fn core_ops_add_u8_checked_add(){}
 /// assert!(0u16 + 0u16 == 0u16 + 0u16);
 /// assert!(0u16 + 65535u16 == 65535u16 + 0u16);
 /// assert!(65535u16 + 0u16 == 0u16 + 65535u16);
-/// assert!(20635u16 + 10417u16 == 10417u16 + 20635u16);
-/// assert!(21678u16 + 8090u16 == 8090u16 + 21678u16);
-/// assert!(55475u16 + 73u16 == 73u16 + 55475u16);
-/// assert!(30424u16 + 23890u16 == 23890u16 + 30424u16);
+/// assert!(41749u16 + 23482u16 == 23482u16 + 41749u16);
+/// assert!(34217u16 + 17957u16 == 17957u16 + 34217u16);
+/// assert!(21445u16 + 1395u16 == 1395u16 + 21445u16);
+/// assert!(18825u16 + 7416u16 == 7416u16 + 18825u16);
 /// # }
 /// ```
 /// ## Left identity
@@ -798,11 +798,11 @@ pub fn core_ops_add_u8_checked_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0u16 + 0 == 0u16);
 /// assert!(65535u16 + 0 == 65535u16);
-/// assert!(31819u16 + 0 == 31819u16);
-/// assert!(10938u16 + 0 == 10938u16);
-/// assert!(36566u16 + 0 == 36566u16);
-/// assert!(24467u16 + 0 == 24467u16);
-/// assert!(20318u16 + 0 == 20318u16);
+/// assert!(29669u16 + 0 == 29669u16);
+/// assert!(17625u16 + 0 == 17625u16);
+/// assert!(60111u16 + 0 == 60111u16);
+/// assert!(45438u16 + 0 == 45438u16);
+/// assert!(14306u16 + 0 == 14306u16);
 /// # }
 /// ```
 /// ## Right identity
@@ -815,11 +815,11 @@ pub fn core_ops_add_u8_checked_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0 + 0u16 == 0u16);
 /// assert!(0 + 65535u16 == 65535u16);
-/// assert!(0 + 27102u16 == 27102u16);
-/// assert!(0 + 21191u16 == 21191u16);
-/// assert!(0 + 200u16 == 200u16);
-/// assert!(0 + 26367u16 == 26367u16);
-/// assert!(0 + 7699u16 == 7699u16);
+/// assert!(0 + 30615u16 == 30615u16);
+/// assert!(0 + 14097u16 == 14097u16);
+/// assert!(0 + 2981u16 == 2981u16);
+/// assert!(0 + 32944u16 == 32944u16);
+/// assert!(0 + 29872u16 == 29872u16);
 /// # }
 /// ```
 /// ## Associativity
@@ -834,9 +834,9 @@ pub fn core_ops_add_u8_checked_add(){}
 /// assert!((0u16 + 0u16) + 65535u16 == 0u16 + (0u16 + 65535u16));
 /// assert!((0u16 + 65535u16) + 0u16 == 0u16 + (65535u16 + 0u16));
 /// assert!((65535u16 + 0u16) + 0u16 == 65535u16 + (0u16 + 0u16));
-/// assert!((4527u16 + 16733u16) + 36066u16 == 4527u16 + (16733u16 + 36066u16));
-/// assert!((19027u16 + 17156u16) + 10932u16 == 19027u16 + (17156u16 + 10932u16));
-/// assert!((34444u16 + 3095u16) + 7028u16 == 34444u16 + (3095u16 + 7028u16));
+/// assert!((18429u16 + 7867u16) + 14472u16 == 18429u16 + (7867u16 + 14472u16));
+/// assert!((12273u16 + 16461u16) + 1409u16 == 12273u16 + (16461u16 + 1409u16));
+/// assert!((15275u16 + 19048u16) + 30714u16 == 15275u16 + (19048u16 + 30714u16));
 /// # }
 /// ```
 pub fn core_ops_add_u16_add(){}
@@ -852,10 +852,10 @@ pub fn core_ops_add_u16_add(){}
 /// assert!(0u16.checked_add(0u16) == Some(0u16));
 /// assert!(0u16.checked_add(65535u16) == Some(65535u16));
 /// assert!(65535u16.checked_add(0u16) == Some(65535u16));
-/// assert!(38504u16.checked_add(9099u16) == Some(47603u16));
-/// assert!(12696u16.checked_add(12515u16) == Some(25211u16));
-/// assert!(12578u16.checked_add(33993u16) == Some(46571u16));
-/// assert!(10348u16.checked_add(32300u16) == Some(42648u16));
+/// assert!(18988u16.checked_add(23929u16) == Some(42917u16));
+/// assert!(21335u16.checked_add(43150u16) == Some(64485u16));
+/// assert!(10246u16.checked_add(9324u16) == Some(19570u16));
+/// assert!(13779u16.checked_add(49779u16) == Some(63558u16));
 /// # }
 /// ```
 /// ## None when overflowing
@@ -867,10 +867,10 @@ pub fn core_ops_add_u16_add(){}
 /// # use core_spec::*;
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(65535u16.checked_add(65535u16) == None);
-/// assert!(63412u16.checked_add(53452u16) == None);
-/// assert!(35459u16.checked_add(49939u16) == None);
-/// assert!(60607u16.checked_add(50104u16) == None);
-/// assert!(64237u16.checked_add(46366u16) == None);
+/// assert!(39237u16.checked_add(56870u16) == None);
+/// assert!(63011u16.checked_add(6738u16) == None);
+/// assert!(34385u16.checked_add(45008u16) == None);
+/// assert!(42332u16.checked_add(44677u16) == None);
 /// # }
 /// ```
 /// ## Commutativity
@@ -885,9 +885,9 @@ pub fn core_ops_add_u16_add(){}
 /// assert!(0u16.checked_add(65535u16) == 65535u16.checked_add(0u16));
 /// assert!(65535u16.checked_add(0u16) == 0u16.checked_add(65535u16));
 /// assert!(65535u16.checked_add(65535u16) == 65535u16.checked_add(65535u16));
-/// assert!(44898u16.checked_add(13373u16) == 13373u16.checked_add(44898u16));
-/// assert!(45444u16.checked_add(49738u16) == 49738u16.checked_add(45444u16));
-/// assert!(48665u16.checked_add(17078u16) == 17078u16.checked_add(48665u16));
+/// assert!(56243u16.checked_add(27519u16) == 27519u16.checked_add(56243u16));
+/// assert!(62069u16.checked_add(56952u16) == 56952u16.checked_add(62069u16));
+/// assert!(59345u16.checked_add(49146u16) == 49146u16.checked_add(59345u16));
 /// # }
 /// ```
 /// ## Left identity
@@ -900,11 +900,11 @@ pub fn core_ops_add_u16_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0u16.checked_add(0u16) == Some(0u16));
 /// assert!(65535u16.checked_add(0u16) == Some(65535u16));
-/// assert!(48140u16.checked_add(0u16) == Some(48140u16));
-/// assert!(23658u16.checked_add(0u16) == Some(23658u16));
-/// assert!(4584u16.checked_add(0u16) == Some(4584u16));
-/// assert!(20873u16.checked_add(0u16) == Some(20873u16));
-/// assert!(24872u16.checked_add(0u16) == Some(24872u16));
+/// assert!(64512u16.checked_add(0u16) == Some(64512u16));
+/// assert!(24120u16.checked_add(0u16) == Some(24120u16));
+/// assert!(26997u16.checked_add(0u16) == Some(26997u16));
+/// assert!(35576u16.checked_add(0u16) == Some(35576u16));
+/// assert!(44474u16.checked_add(0u16) == Some(44474u16));
 /// # }
 /// ```
 /// ## Right identity
@@ -917,11 +917,11 @@ pub fn core_ops_add_u16_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0u16.checked_add(0u16) == Some(0u16));
 /// assert!(0u16.checked_add(65535u16) == Some(65535u16));
-/// assert!(0u16.checked_add(53138u16) == Some(53138u16));
-/// assert!(0u16.checked_add(46444u16) == Some(46444u16));
-/// assert!(0u16.checked_add(59935u16) == Some(59935u16));
-/// assert!(0u16.checked_add(39800u16) == Some(39800u16));
-/// assert!(0u16.checked_add(30992u16) == Some(30992u16));
+/// assert!(0u16.checked_add(51651u16) == Some(51651u16));
+/// assert!(0u16.checked_add(64244u16) == Some(64244u16));
+/// assert!(0u16.checked_add(13505u16) == Some(13505u16));
+/// assert!(0u16.checked_add(28269u16) == Some(28269u16));
+/// assert!(0u16.checked_add(13258u16) == Some(13258u16));
 /// # }
 /// ```
 /// ## Associativity
@@ -962,10 +962,10 @@ pub fn core_ops_add_u16_checked_add(){}
 /// assert!(0u32 + 0u32 == 0u32);
 /// assert!(0u32 + 4294967295u32 == 4294967295u32);
 /// assert!(4294967295u32 + 0u32 == 4294967295u32);
-/// assert!(2428432152u32 + 1653881166u32 == 4082313318u32);
-/// assert!(2309269632u32 + 577764189u32 == 2887033821u32);
-/// assert!(3688919628u32 + 529754662u32 == 4218674290u32);
-/// assert!(669370967u32 + 1164699285u32 == 1834070252u32);
+/// assert!(1916838581u32 + 1867326820u32 == 3784165401u32);
+/// assert!(2403193023u32 + 1378792873u32 == 3781985896u32);
+/// assert!(2056028193u32 + 717535420u32 == 2773563613u32);
+/// assert!(818836294u32 + 3184656551u32 == 4003492845u32);
 /// # }
 /// ```
 /// ## Panics when overflowing
@@ -977,10 +977,10 @@ pub fn core_ops_add_u16_checked_add(){}
 /// # use core_spec::*;
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(panics!(4294967295u32 + 4294967295u32));
-/// assert!(panics!(1752112523u32 + 3761242419u32));
-/// assert!(panics!(2096203312u32 + 3085097801u32));
-/// assert!(panics!(2233599276u32 + 2495597598u32));
-/// assert!(panics!(4024406167u32 + 3775900451u32));
+/// assert!(panics!(1732794631u32 + 4125656264u32));
+/// assert!(panics!(2644610124u32 + 3552763161u32));
+/// assert!(panics!(1413599579u32 + 3268056546u32));
+/// assert!(panics!(3657998284u32 + 3175825949u32));
 /// # }
 /// ```
 /// ## Commutativity
@@ -994,10 +994,10 @@ pub fn core_ops_add_u16_checked_add(){}
 /// assert!(0u32 + 0u32 == 0u32 + 0u32);
 /// assert!(0u32 + 4294967295u32 == 4294967295u32 + 0u32);
 /// assert!(4294967295u32 + 0u32 == 0u32 + 4294967295u32);
-/// assert!(1489649489u32 + 2111464312u32 == 2111464312u32 + 1489649489u32);
-/// assert!(430027375u32 + 860233823u32 == 860233823u32 + 430027375u32);
-/// assert!(1204458014u32 + 393433141u32 == 393433141u32 + 1204458014u32);
-/// assert!(772262638u32 + 1865070713u32 == 1865070713u32 + 772262638u32);
+/// assert!(2182951120u32 + 1986764447u32 == 1986764447u32 + 2182951120u32);
+/// assert!(1048514664u32 + 2692993596u32 == 2692993596u32 + 1048514664u32);
+/// assert!(1300112244u32 + 673170742u32 == 673170742u32 + 1300112244u32);
+/// assert!(871484658u32 + 543611400u32 == 543611400u32 + 871484658u32);
 /// # }
 /// ```
 /// ## Left identity
@@ -1010,11 +1010,11 @@ pub fn core_ops_add_u16_checked_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0u32 + 0 == 0u32);
 /// assert!(4294967295u32 + 0 == 4294967295u32);
-/// assert!(4162883769u32 + 0 == 4162883769u32);
-/// assert!(2660758149u32 + 0 == 2660758149u32);
-/// assert!(4181323164u32 + 0 == 4181323164u32);
-/// assert!(4051827317u32 + 0 == 4051827317u32);
-/// assert!(4217115865u32 + 0 == 4217115865u32);
+/// assert!(2271285329u32 + 0 == 2271285329u32);
+/// assert!(1626925841u32 + 0 == 1626925841u32);
+/// assert!(2257870636u32 + 0 == 2257870636u32);
+/// assert!(2983762624u32 + 0 == 2983762624u32);
+/// assert!(2542836994u32 + 0 == 2542836994u32);
 /// # }
 /// ```
 /// ## Right identity
@@ -1027,11 +1027,11 @@ pub fn core_ops_add_u16_checked_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0 + 0u32 == 0u32);
 /// assert!(0 + 4294967295u32 == 4294967295u32);
-/// assert!(0 + 541679851u32 == 541679851u32);
-/// assert!(0 + 3313911122u32 == 3313911122u32);
-/// assert!(0 + 3066975833u32 == 3066975833u32);
-/// assert!(0 + 1116312417u32 == 1116312417u32);
-/// assert!(0 + 1564815180u32 == 1564815180u32);
+/// assert!(0 + 3678527288u32 == 3678527288u32);
+/// assert!(0 + 15199u32 == 15199u32);
+/// assert!(0 + 3095489077u32 == 3095489077u32);
+/// assert!(0 + 2750823793u32 == 2750823793u32);
+/// assert!(0 + 3655940132u32 == 3655940132u32);
 /// # }
 /// ```
 /// ## Associativity
@@ -1046,12 +1046,12 @@ pub fn core_ops_add_u16_checked_add(){}
 /// assert!((0u32 + 0u32) + 4294967295u32 == 0u32 + (0u32 + 4294967295u32));
 /// assert!((0u32 + 4294967295u32) + 0u32 == 0u32 + (4294967295u32 + 0u32));
 /// assert!((4294967295u32 + 0u32) + 0u32 == 4294967295u32 + (0u32 + 0u32));
-/// assert!((1042550799u32 + 782482406u32) + 1561262534u32
-///         == 1042550799u32 + (782482406u32 + 1561262534u32));
-/// assert!((85693732u32 + 3249341552u32) + 233414786u32
-///         == 85693732u32 + (3249341552u32 + 233414786u32));
-/// assert!((1303862261u32 + 1982577543u32) + 923700650u32
-///         == 1303862261u32 + (1982577543u32 + 923700650u32));
+/// assert!((47090513u32 + 2645340346u32) + 1447744816u32
+///         == 47090513u32 + (2645340346u32 + 1447744816u32));
+/// assert!((366201493u32 + 1551837092u32) + 602416881u32
+///         == 366201493u32 + (1551837092u32 + 602416881u32));
+/// assert!((2611690411u32 + 538885865u32) + 872512866u32
+///         == 2611690411u32 + (538885865u32 + 872512866u32));
 /// # }
 /// ```
 pub fn core_ops_add_u32_add(){}
@@ -1067,10 +1067,10 @@ pub fn core_ops_add_u32_add(){}
 /// assert!(0u32.checked_add(0u32) == Some(0u32));
 /// assert!(0u32.checked_add(4294967295u32) == Some(4294967295u32));
 /// assert!(4294967295u32.checked_add(0u32) == Some(4294967295u32));
-/// assert!(1510896598u32.checked_add(739546027u32) == Some(2250442625u32));
-/// assert!(34969989u32.checked_add(1503012627u32) == Some(1537982616u32));
-/// assert!(2051258597u32.checked_add(876194936u32) == Some(2927453533u32));
-/// assert!(1979875804u32.checked_add(766297611u32) == Some(2746173415u32));
+/// assert!(496604356u32.checked_add(287701069u32) == Some(784305425u32));
+/// assert!(469626658u32.checked_add(1485686854u32) == Some(1955313512u32));
+/// assert!(4263077847u32.checked_add(1414639u32) == Some(4264492486u32));
+/// assert!(2019928432u32.checked_add(2222499980u32) == Some(4242428412u32));
 /// # }
 /// ```
 /// ## None when overflowing
@@ -1082,10 +1082,10 @@ pub fn core_ops_add_u32_add(){}
 /// # use core_spec::*;
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(4294967295u32.checked_add(4294967295u32) == None);
-/// assert!(2764779653u32.checked_add(4015205926u32) == None);
-/// assert!(1691089602u32.checked_add(3923515427u32) == None);
-/// assert!(2529952733u32.checked_add(3755503893u32) == None);
-/// assert!(4049832349u32.checked_add(385872821u32) == None);
+/// assert!(3480170470u32.checked_add(4141953202u32) == None);
+/// assert!(4253646812u32.checked_add(2952265509u32) == None);
+/// assert!(4068877698u32.checked_add(3615948754u32) == None);
+/// assert!(3100627445u32.checked_add(3971421084u32) == None);
 /// # }
 /// ```
 /// ## Commutativity
@@ -1100,9 +1100,9 @@ pub fn core_ops_add_u32_add(){}
 /// assert!(0u32.checked_add(4294967295u32) == 4294967295u32.checked_add(0u32));
 /// assert!(4294967295u32.checked_add(0u32) == 0u32.checked_add(4294967295u32));
 /// assert!(4294967295u32.checked_add(4294967295u32) == 4294967295u32.checked_add(4294967295u32));
-/// assert!(1832355262u32.checked_add(2178268854u32) == 2178268854u32.checked_add(1832355262u32));
-/// assert!(2102922986u32.checked_add(3056301062u32) == 3056301062u32.checked_add(2102922986u32));
-/// assert!(1156900450u32.checked_add(3261964514u32) == 3261964514u32.checked_add(1156900450u32));
+/// assert!(3081563449u32.checked_add(3091548329u32) == 3091548329u32.checked_add(3081563449u32));
+/// assert!(3233973771u32.checked_add(3683754918u32) == 3683754918u32.checked_add(3233973771u32));
+/// assert!(3772028530u32.checked_add(3468063212u32) == 3468063212u32.checked_add(3772028530u32));
 /// # }
 /// ```
 /// ## Left identity
@@ -1115,11 +1115,11 @@ pub fn core_ops_add_u32_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0u32.checked_add(0u32) == Some(0u32));
 /// assert!(4294967295u32.checked_add(0u32) == Some(4294967295u32));
-/// assert!(3249650077u32.checked_add(0u32) == Some(3249650077u32));
-/// assert!(2130050197u32.checked_add(0u32) == Some(2130050197u32));
-/// assert!(2117031684u32.checked_add(0u32) == Some(2117031684u32));
-/// assert!(2019705704u32.checked_add(0u32) == Some(2019705704u32));
-/// assert!(1209308376u32.checked_add(0u32) == Some(1209308376u32));
+/// assert!(2660804380u32.checked_add(0u32) == Some(2660804380u32));
+/// assert!(1053185591u32.checked_add(0u32) == Some(1053185591u32));
+/// assert!(3414494668u32.checked_add(0u32) == Some(3414494668u32));
+/// assert!(2605373754u32.checked_add(0u32) == Some(2605373754u32));
+/// assert!(1973552644u32.checked_add(0u32) == Some(1973552644u32));
 /// # }
 /// ```
 /// ## Right identity
@@ -1132,11 +1132,11 @@ pub fn core_ops_add_u32_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0u32.checked_add(0u32) == Some(0u32));
 /// assert!(0u32.checked_add(4294967295u32) == Some(4294967295u32));
-/// assert!(0u32.checked_add(17725074u32) == Some(17725074u32));
-/// assert!(0u32.checked_add(272488299u32) == Some(272488299u32));
-/// assert!(0u32.checked_add(511541055u32) == Some(511541055u32));
-/// assert!(0u32.checked_add(86331823u32) == Some(86331823u32));
-/// assert!(0u32.checked_add(2174904342u32) == Some(2174904342u32));
+/// assert!(0u32.checked_add(2467364219u32) == Some(2467364219u32));
+/// assert!(0u32.checked_add(3867635198u32) == Some(3867635198u32));
+/// assert!(0u32.checked_add(3286980667u32) == Some(3286980667u32));
+/// assert!(0u32.checked_add(2565097253u32) == Some(2565097253u32));
+/// assert!(0u32.checked_add(1607931383u32) == Some(1607931383u32));
 /// # }
 /// ```
 /// ## Associativity
@@ -1177,10 +1177,10 @@ pub fn core_ops_add_u32_checked_add(){}
 /// assert!(0u64 + 0u64 == 0u64);
 /// assert!(0u64 + 18446744073709551615u64 == 18446744073709551615u64);
 /// assert!(18446744073709551615u64 + 0u64 == 18446744073709551615u64);
-/// assert!(4451248067406516904u64 + 6137155643965851413u64 == 10588403711372368317u64);
-/// assert!(4759217687863202988u64 + 3712035701164232720u64 == 8471253389027435708u64);
-/// assert!(13153755130886044289u64 + 5288076401089458045u64 == 18441831531975502334u64);
-/// assert!(12207833651056998531u64 + 3999932359202734935u64 == 16207766010259733466u64);
+/// assert!(13125140763534286593u64 + 3927769232320196337u64 == 17052909995854482930u64);
+/// assert!(9093381719757337827u64 + 620948497547885633u64 == 9714330217305223460u64);
+/// assert!(1934212261962110729u64 + 11673961412482495690u64 == 13608173674444606419u64);
+/// assert!(6766101589916358075u64 + 6200036605893040190u64 == 12966138195809398265u64);
 /// # }
 /// ```
 /// ## Panics when overflowing
@@ -1192,10 +1192,10 @@ pub fn core_ops_add_u32_checked_add(){}
 /// # use core_spec::*;
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(panics!(18446744073709551615u64 + 18446744073709551615u64));
-/// assert!(panics!(13177000629990521530u64 + 13559696913066999837u64));
-/// assert!(panics!(11314422851191365257u64 + 11197552383355996075u64));
-/// assert!(panics!(6074131584535470248u64 + 18404918094397467774u64));
-/// assert!(panics!(17908097402294852684u64 + 15021816312840762502u64));
+/// assert!(panics!(6448567070522900651u64 + 15470470475406116552u64));
+/// assert!(panics!(14148468244294055977u64 + 15677571747955404748u64));
+/// assert!(panics!(17943903405453721814u64 + 9559765792233331028u64));
+/// assert!(panics!(17114909009124663695u64 + 9413751319251859184u64));
 /// # }
 /// ```
 /// ## Commutativity
@@ -1209,14 +1209,14 @@ pub fn core_ops_add_u32_checked_add(){}
 /// assert!(0u64 + 0u64 == 0u64 + 0u64);
 /// assert!(0u64 + 18446744073709551615u64 == 18446744073709551615u64 + 0u64);
 /// assert!(18446744073709551615u64 + 0u64 == 0u64 + 18446744073709551615u64);
-/// assert!(5687026623193332530u64 + 820890411863974613u64
-///         == 820890411863974613u64 + 5687026623193332530u64);
-/// assert!(10712410455245545096u64 + 7222348910621825969u64
-///         == 7222348910621825969u64 + 10712410455245545096u64);
-/// assert!(862407298443626099u64 + 12281928211865385330u64
-///         == 12281928211865385330u64 + 862407298443626099u64);
-/// assert!(5073377454086887523u64 + 9391899965784426052u64
-///         == 9391899965784426052u64 + 5073377454086887523u64);
+/// assert!(5882701380255680948u64 + 5323447308076762143u64
+///         == 5323447308076762143u64 + 5882701380255680948u64);
+/// assert!(13025422064699287192u64 + 3376340481103581704u64
+///         == 3376340481103581704u64 + 13025422064699287192u64);
+/// assert!(10012257027772040881u64 + 2562233125230032418u64
+///         == 2562233125230032418u64 + 10012257027772040881u64);
+/// assert!(2165916656086874440u64 + 11169927090654556061u64
+///         == 11169927090654556061u64 + 2165916656086874440u64);
 /// # }
 /// ```
 /// ## Left identity
@@ -1229,11 +1229,11 @@ pub fn core_ops_add_u32_checked_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0u64 + 0 == 0u64);
 /// assert!(18446744073709551615u64 + 0 == 18446744073709551615u64);
-/// assert!(11225437658332914997u64 + 0 == 11225437658332914997u64);
-/// assert!(3435954796847335228u64 + 0 == 3435954796847335228u64);
-/// assert!(5138817863390466403u64 + 0 == 5138817863390466403u64);
-/// assert!(6021077595623713517u64 + 0 == 6021077595623713517u64);
-/// assert!(5996584602221374917u64 + 0 == 5996584602221374917u64);
+/// assert!(12728106104009289020u64 + 0 == 12728106104009289020u64);
+/// assert!(8831262569610964997u64 + 0 == 8831262569610964997u64);
+/// assert!(18154579220548667250u64 + 0 == 18154579220548667250u64);
+/// assert!(4269198553623692496u64 + 0 == 4269198553623692496u64);
+/// assert!(3623985269915848117u64 + 0 == 3623985269915848117u64);
 /// # }
 /// ```
 /// ## Right identity
@@ -1246,11 +1246,11 @@ pub fn core_ops_add_u32_checked_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0 + 0u64 == 0u64);
 /// assert!(0 + 18446744073709551615u64 == 18446744073709551615u64);
-/// assert!(0 + 14124304551593770404u64 == 14124304551593770404u64);
-/// assert!(0 + 14764796059550823016u64 == 14764796059550823016u64);
-/// assert!(0 + 9814677291571155236u64 == 9814677291571155236u64);
-/// assert!(0 + 4592244130015484588u64 == 4592244130015484588u64);
-/// assert!(0 + 8507402111284511317u64 == 8507402111284511317u64);
+/// assert!(0 + 302309546184672550u64 == 302309546184672550u64);
+/// assert!(0 + 13896292345132402197u64 == 13896292345132402197u64);
+/// assert!(0 + 5489813207023984314u64 == 5489813207023984314u64);
+/// assert!(0 + 4529177259527971793u64 == 4529177259527971793u64);
+/// assert!(0 + 4439743563818569357u64 == 4439743563818569357u64);
 /// # }
 /// ```
 /// ## Associativity
@@ -1265,12 +1265,12 @@ pub fn core_ops_add_u32_checked_add(){}
 /// assert!((0u64 + 0u64) + 18446744073709551615u64 == 0u64 + (0u64 + 18446744073709551615u64));
 /// assert!((0u64 + 18446744073709551615u64) + 0u64 == 0u64 + (18446744073709551615u64 + 0u64));
 /// assert!((18446744073709551615u64 + 0u64) + 0u64 == 18446744073709551615u64 + (0u64 + 0u64));
-/// assert!((2913720325477643315u64 + 309511373321093801u64) + 3754264632700635599u64
-///         == 2913720325477643315u64 + (309511373321093801u64 + 3754264632700635599u64));
-/// assert!((1025934828906614216u64 + 5266979172070452900u64) + 11021889598623830417u64
-///         == 1025934828906614216u64 + (5266979172070452900u64 + 11021889598623830417u64));
-/// assert!((4596738939073386562u64 + 6254905452981452537u64) + 6005791977405042189u64
-///         == 4596738939073386562u64 + (6254905452981452537u64 + 6005791977405042189u64));
+/// assert!((778731238713794576u64 + 5510787770492739566u64) + 10216325256439029411u64
+///         == 778731238713794576u64 + (5510787770492739566u64 + 10216325256439029411u64));
+/// assert!((12345141418044287607u64 + 4131064766553685364u64) + 59372124706784222u64
+///         == 12345141418044287607u64 + (4131064766553685364u64 + 59372124706784222u64));
+/// assert!((434215247792223641u64 + 2831757766042833068u64) + 8822908435009789685u64
+///         == 434215247792223641u64 + (2831757766042833068u64 + 8822908435009789685u64));
 /// # }
 /// ```
 pub fn core_ops_add_u64_add(){}
@@ -1286,14 +1286,14 @@ pub fn core_ops_add_u64_add(){}
 /// assert!(0u64.checked_add(0u64) == Some(0u64));
 /// assert!(0u64.checked_add(18446744073709551615u64) == Some(18446744073709551615u64));
 /// assert!(18446744073709551615u64.checked_add(0u64) == Some(18446744073709551615u64));
-/// assert!(5430976214486531257u64.checked_add(4452159472817542807u64)
-///         == Some(9883135687304074064u64));
-/// assert!(3714166765535238078u64.checked_add(5568796798007876915u64)
-///         == Some(9282963563543114993u64));
-/// assert!(7018291680783791766u64.checked_add(3801163595538201440u64)
-///         == Some(10819455276321993206u64));
-/// assert!(759096659125148862u64.checked_add(13872589988617603284u64)
-///         == Some(14631686647742752146u64));
+/// assert!(10319665142740526495u64.checked_add(1580939060803786461u64)
+///         == Some(11900604203544312956u64));
+/// assert!(96040861103887606u64.checked_add(17096831315995372080u64)
+///         == Some(17192872177099259686u64));
+/// assert!(10247670434930013634u64.checked_add(2768708255389041973u64)
+///         == Some(13016378690319055607u64));
+/// assert!(16580826385761171881u64.checked_add(1395676480227006999u64)
+///         == Some(17976502865988178880u64));
 /// # }
 /// ```
 /// ## None when overflowing
@@ -1305,10 +1305,10 @@ pub fn core_ops_add_u64_add(){}
 /// # use core_spec::*;
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(18446744073709551615u64.checked_add(18446744073709551615u64) == None);
-/// assert!(17956522190422476652u64.checked_add(12124157300887935670u64) == None);
-/// assert!(10044213781095970871u64.checked_add(12585486152016111974u64) == None);
-/// assert!(15836385237374528562u64.checked_add(12377569923601906209u64) == None);
-/// assert!(4505638310268533491u64.checked_add(15245720112511460449u64) == None);
+/// assert!(3837264180014193847u64.checked_add(17695739075348268205u64) == None);
+/// assert!(5319007015111890645u64.checked_add(15494180103804553178u64) == None);
+/// assert!(17657311451316839294u64.checked_add(16639217354312975208u64) == None);
+/// assert!(7970518524142412284u64.checked_add(17471945994664784480u64) == None);
 /// # }
 /// ```
 /// ## Commutativity
@@ -1326,12 +1326,12 @@ pub fn core_ops_add_u64_add(){}
 ///         == 0u64.checked_add(18446744073709551615u64));
 /// assert!(18446744073709551615u64.checked_add(18446744073709551615u64)
 ///         == 18446744073709551615u64.checked_add(18446744073709551615u64));
-/// assert!(6610704845120514490u64.checked_add(5641838204242065259u64)
-///         == 5641838204242065259u64.checked_add(6610704845120514490u64));
-/// assert!(11525573352864736181u64.checked_add(7339786106222254945u64)
-///         == 7339786106222254945u64.checked_add(11525573352864736181u64));
-/// assert!(9419931050420023483u64.checked_add(7711411145921816272u64)
-///         == 7711411145921816272u64.checked_add(9419931050420023483u64));
+/// assert!(10173333614985470077u64.checked_add(4663152924529571316u64)
+///         == 4663152924529571316u64.checked_add(10173333614985470077u64));
+/// assert!(538869268897202571u64.checked_add(216463633744338667u64)
+///         == 216463633744338667u64.checked_add(538869268897202571u64));
+/// assert!(14139591821137162892u64.checked_add(17836696054002117003u64)
+///         == 17836696054002117003u64.checked_add(14139591821137162892u64));
 /// # }
 /// ```
 /// ## Left identity
@@ -1344,11 +1344,11 @@ pub fn core_ops_add_u64_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0u64.checked_add(0u64) == Some(0u64));
 /// assert!(18446744073709551615u64.checked_add(0u64) == Some(18446744073709551615u64));
-/// assert!(17715094714652803987u64.checked_add(0u64) == Some(17715094714652803987u64));
-/// assert!(8904946019291964715u64.checked_add(0u64) == Some(8904946019291964715u64));
-/// assert!(748583592113745896u64.checked_add(0u64) == Some(748583592113745896u64));
-/// assert!(4401535664202265188u64.checked_add(0u64) == Some(4401535664202265188u64));
-/// assert!(5521650004380733846u64.checked_add(0u64) == Some(5521650004380733846u64));
+/// assert!(814894684741255764u64.checked_add(0u64) == Some(814894684741255764u64));
+/// assert!(16315219662698286557u64.checked_add(0u64) == Some(16315219662698286557u64));
+/// assert!(16885662844312017565u64.checked_add(0u64) == Some(16885662844312017565u64));
+/// assert!(3532464429668122453u64.checked_add(0u64) == Some(3532464429668122453u64));
+/// assert!(12906718864756491514u64.checked_add(0u64) == Some(12906718864756491514u64));
 /// # }
 /// ```
 /// ## Right identity
@@ -1361,11 +1361,11 @@ pub fn core_ops_add_u64_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(0u64.checked_add(0u64) == Some(0u64));
 /// assert!(0u64.checked_add(18446744073709551615u64) == Some(18446744073709551615u64));
-/// assert!(0u64.checked_add(11935624364662888400u64) == Some(11935624364662888400u64));
-/// assert!(0u64.checked_add(12239669834450739386u64) == Some(12239669834450739386u64));
-/// assert!(0u64.checked_add(124541409723598328u64) == Some(124541409723598328u64));
-/// assert!(0u64.checked_add(15146935268267261830u64) == Some(15146935268267261830u64));
-/// assert!(0u64.checked_add(12504683014550259814u64) == Some(12504683014550259814u64));
+/// assert!(0u64.checked_add(2703397565941799802u64) == Some(2703397565941799802u64));
+/// assert!(0u64.checked_add(9130468968030618558u64) == Some(9130468968030618558u64));
+/// assert!(0u64.checked_add(2666648179673026508u64) == Some(2666648179673026508u64));
+/// assert!(0u64.checked_add(13924031752538595728u64) == Some(13924031752538595728u64));
+/// assert!(0u64.checked_add(3168860215794057572u64) == Some(3168860215794057572u64));
 /// # }
 /// ```
 /// ## Associativity
@@ -1420,18 +1420,18 @@ pub fn core_ops_add_u64_checked_add(){}
 ///         == 340282366920938463463374607431768211455u128);
 /// assert!(340282366920938463463374607431768211455u128 + 0u128
 ///         == 340282366920938463463374607431768211455u128);
-/// assert!(76988045222912797819913230140414667152u128
-///         + 157884682124212412824168568043823352980u128
-///         == 234872727347125210644081798184238020132u128);
-/// assert!(67795153207629498911801914561204055627u128
-///         + 20980839665622989303264794747867557956u128
-///         == 88775992873252488215066709309071613583u128);
-/// assert!(153016411621375441846607006017390144298u128
-///         + 148995609526074464804427841357562782455u128
-///         == 302012021147449906651034847374952926753u128);
-/// assert!(95034978183316842509114773162706502186u128
-///         + 53695433238845553103150299267760889656u128
-///         == 148730411422162395612265072430467391842u128);
+/// assert!(301370909848594279591461150471121578737u128
+///         + 35814339722372214555284862383047721617u128
+///         == 337185249570966494146746012854169300354u128);
+/// assert!(89996932787694552297624275082161448516u128
+///         + 37518987540574558085768394449524015429u128
+///         == 127515920328269110383392669531685463945u128);
+/// assert!(27427478810616094779597024591837868989u128
+///         + 103963563277872155549982150581077579381u128
+///         == 131391042088488250329579175172915448370u128);
+/// assert!(94805089649375580165582462057439883094u128
+///         + 242867375558892211929159567015371862266u128
+///         == 337672465208267792094742029072811745360u128);
 /// # }
 /// ```
 /// ## Panics when overflowing
@@ -1447,20 +1447,20 @@ pub fn core_ops_add_u64_checked_add(){}
 ///         340282366920938463463374607431768211455u128
 ///     ));
 /// assert!(panics!(
-///         184425210232649071852582189860066537521u128 +
-///         159469729460936646573622456627906172987u128
+///         326273368693551272326556222344464025486u128 +
+///         154459877113479028141523241753164958278u128
 ///     ));
 /// assert!(panics!(
-///         330055022628157842902120943159899804011u128 +
-///         56732038160401495637301816482831681653u128
+///         261017019014281949839602196930541122982u128 +
+///         142195501228092516616387760748284664758u128
 ///     ));
 /// assert!(panics!(
-///         336332491792630363572829843219173405916u128 +
-///         237816585063136717276706582935827735024u128
+///         314800563423903301313530256031374157400u128 +
+///         110119266231012759780169682656513567754u128
 ///     ));
 /// assert!(panics!(
-///         109305549229489408126476677402562735799u128 +
-///         276366197622042656484248505639452640090u128
+///         274086314388992267114151700761031247044u128 +
+///         181779057023191838419533310439417359642u128
 ///     ));
 /// # }
 /// ```
@@ -1477,22 +1477,21 @@ pub fn core_ops_add_u64_checked_add(){}
 ///         == 340282366920938463463374607431768211455u128 + 0u128);
 /// assert!(340282366920938463463374607431768211455u128 + 0u128
 ///         == 0u128 + 340282366920938463463374607431768211455u128);
-/// assert!(98272436117253022590889551109077826123u128
-///         + 4133783274923621524649499630261771071u128
-///         == 4133783274923621524649499630261771071u128
-///             + 98272436117253022590889551109077826123u128);
-/// assert!(334545049351844727957359547823211547851u128
-///         + 3992631683673841075561309196590390204u128
-///         == 3992631683673841075561309196590390204u128
-///             + 334545049351844727957359547823211547851u128);
-/// assert!(54878166746167883288818290744274364091u128
-///         + 27586769450578807133970881155185267186u128
-///         == 27586769450578807133970881155185267186u128
-///             + 54878166746167883288818290744274364091u128);
-/// assert!(68298300713037386585251937934160213142u128
-///         + 120276816929747273769657386808809081961u128
-///         == 120276816929747273769657386808809081961u128
-///             + 68298300713037386585251937934160213142u128);
+/// assert!(63526415030570092104962920347736433408u128
+///         + 179391049630257919629323978810269345142u128
+///         == 179391049630257919629323978810269345142u128
+///             + 63526415030570092104962920347736433408u128);
+/// assert!(684359504521534864090066651360731354u128 + 35083182456310223587822506539428191534u128
+///         == 35083182456310223587822506539428191534u128
+///             + 684359504521534864090066651360731354u128);
+/// assert!(16769600507509701152812101393450189451u128
+///         + 305348258432879712481442439179017547540u128
+///         == 305348258432879712481442439179017547540u128
+///             + 16769600507509701152812101393450189451u128);
+/// assert!(250633948371291310669717748444841449430u128
+///         + 526821924908191179154921606076349079u128
+///         == 526821924908191179154921606076349079u128
+///             + 250633948371291310669717748444841449430u128);
 /// # }
 /// ```
 /// ## Left identity
@@ -1506,16 +1505,16 @@ pub fn core_ops_add_u64_checked_add(){}
 /// assert!(0u128 + 0 == 0u128);
 /// assert!(340282366920938463463374607431768211455u128 + 0
 ///         == 340282366920938463463374607431768211455u128);
-/// assert!(146899066460309722320481839646626579616u128 + 0
-///         == 146899066460309722320481839646626579616u128);
-/// assert!(285707762915744874666619329362836493975u128 + 0
-///         == 285707762915744874666619329362836493975u128);
-/// assert!(311661337007061384407241621334560279141u128 + 0
-///         == 311661337007061384407241621334560279141u128);
-/// assert!(214165971470013110037714762279066109657u128 + 0
-///         == 214165971470013110037714762279066109657u128);
-/// assert!(311131795382448448020321925594324656476u128 + 0
-///         == 311131795382448448020321925594324656476u128);
+/// assert!(80949615260197109582061920586998211808u128 + 0
+///         == 80949615260197109582061920586998211808u128);
+/// assert!(61504431792962955670018075684658585207u128 + 0
+///         == 61504431792962955670018075684658585207u128);
+/// assert!(77221703645708040405395057765183635454u128 + 0
+///         == 77221703645708040405395057765183635454u128);
+/// assert!(74543511943943993381311655523035702163u128 + 0
+///         == 74543511943943993381311655523035702163u128);
+/// assert!(117960521058624222994091659979971570436u128 + 0
+///         == 117960521058624222994091659979971570436u128);
 /// # }
 /// ```
 /// ## Right identity
@@ -1529,16 +1528,16 @@ pub fn core_ops_add_u64_checked_add(){}
 /// assert!(0 + 0u128 == 0u128);
 /// assert!(0 + 340282366920938463463374607431768211455u128
 ///         == 340282366920938463463374607431768211455u128);
-/// assert!(0 + 186272985158529778037870003626382741622u128
-///         == 186272985158529778037870003626382741622u128);
-/// assert!(0 + 304548722077211209366187599494906146860u128
-///         == 304548722077211209366187599494906146860u128);
-/// assert!(0 + 13375174828960519415938220668212393962u128
-///         == 13375174828960519415938220668212393962u128);
-/// assert!(0 + 214312118478724164359959175253743035993u128
-///         == 214312118478724164359959175253743035993u128);
-/// assert!(0 + 43290313256206281229707599714978280658u128
-///         == 43290313256206281229707599714978280658u128);
+/// assert!(0 + 263062052446594260353303310653847111455u128
+///         == 263062052446594260353303310653847111455u128);
+/// assert!(0 + 266980034559934049329024821582288219950u128
+///         == 266980034559934049329024821582288219950u128);
+/// assert!(0 + 29575459189974817250905722628623740110u128
+///         == 29575459189974817250905722628623740110u128);
+/// assert!(0 + 164367468580495925957286847163985073389u128
+///         == 164367468580495925957286847163985073389u128);
+/// assert!(0 + 233950753207145698002439731824951226187u128
+///         == 233950753207145698002439731824951226187u128);
 /// # }
 /// ```
 /// ## Associativity
@@ -1556,24 +1555,24 @@ pub fn core_ops_add_u64_checked_add(){}
 ///         == 0u128 + (340282366920938463463374607431768211455u128 + 0u128));
 /// assert!((340282366920938463463374607431768211455u128 + 0u128) + 0u128
 ///         == 340282366920938463463374607431768211455u128 + (0u128 + 0u128));
-/// assert!((47542113992051886557613169266663159960u128
-///         + 18358924576283285282403235562461441033u128)
-///         + 199996202377562266571128274811415623741u128
-///         == 47542113992051886557613169266663159960u128
-///             + (18358924576283285282403235562461441033u128
-///                 + 199996202377562266571128274811415623741u128));
-/// assert!((150694014431239939377259043859006614611u128
-///         + 2522201093242469629019467207116846795u128)
-///         + 20514400101465373097931618083101802139u128
-///         == 150694014431239939377259043859006614611u128
-///             + (2522201093242469629019467207116846795u128
-///                 + 20514400101465373097931618083101802139u128));
-/// assert!((185127814117464554267374316208993215150u128
-///         + 11541701926897877198840461646028786745u128)
-///         + 117726485425294229999190613638903333192u128
-///         == 185127814117464554267374316208993215150u128
-///             + (11541701926897877198840461646028786745u128
-///                 + 117726485425294229999190613638903333192u128));
+/// assert!((66213640771777056249716421577125162345u128
+///         + 96685414438477518421727851335648538050u128)
+///         + 130977045267309913877969376160726992878u128
+///         == 66213640771777056249716421577125162345u128
+///             + (96685414438477518421727851335648538050u128
+///                 + 130977045267309913877969376160726992878u128));
+/// assert!((326078578398515731130953541416336176543u128
+///         + 7243771087818523031993866226308964512u128)
+///         + 2176130121709356634192940911036418865u128
+///         == 326078578398515731130953541416336176543u128
+///             + (7243771087818523031993866226308964512u128
+///                 + 2176130121709356634192940911036418865u128));
+/// assert!((98619006774975771709075126065309763503u128
+///         + 126890652920525934930516729366883939708u128)
+///         + 31455374901545913470370967480236109185u128
+///         == 98619006774975771709075126065309763503u128
+///             + (126890652920525934930516729366883939708u128
+///                 + 31455374901545913470370967480236109185u128));
 /// # }
 /// ```
 pub fn core_ops_add_u128_add(){}
@@ -1591,18 +1590,18 @@ pub fn core_ops_add_u128_add(){}
 ///         == Some(340282366920938463463374607431768211455u128));
 /// assert!(340282366920938463463374607431768211455u128.checked_add(0u128)
 ///         == Some(340282366920938463463374607431768211455u128));
-/// assert!(124429733625595774826057824204290756414u128
-///         .checked_add(753869259891939005704978176557431790u128)
-///         == Some(125183602885487713831762802380848188204u128));
-/// assert!(35649817079931564808622326409779656118u128
-///         .checked_add(50110795600880266500328561204994868311u128)
-///         == Some(85760612680811831308950887614774524429u128));
-/// assert!(26293038726565610251561079820392329036u128
-///         .checked_add(93111726590833087029890422164420757113u128)
-///         == Some(119404765317398697281451501984813086149u128));
-/// assert!(94237444331017503599521382607311066365u128
-///         .checked_add(36631734981315473446586363361523328411u128)
-///         == Some(130869179312332977046107745968834394776u128));
+/// assert!(54612447081117559865967542658311279741u128
+///         .checked_add(195263932934173560795176109448775097946u128)
+///         == Some(249876380015291120661143652107086377687u128));
+/// assert!(217682747879594299709948525807931757780u128
+///         .checked_add(82409755854691091437725797019488812379u128)
+///         == Some(300092503734285391147674322827420570159u128));
+/// assert!(118146600004434510218378985476528641493u128
+///         .checked_add(219587934433786544932460097221550197577u128)
+///         == Some(337734534438221055150839082698078839070u128));
+/// assert!(140390201758942030562582956931042616463u128
+///         .checked_add(78280835050497905126706607081453375073u128)
+///         == Some(218671036809439935689289564012495991536u128));
 /// # }
 /// ```
 /// ## None when overflowing
@@ -1615,14 +1614,14 @@ pub fn core_ops_add_u128_add(){}
 /// # #[allow(arithmetic_overflow)] {
 /// assert!(340282366920938463463374607431768211455u128
 ///         .checked_add(340282366920938463463374607431768211455u128) == None);
-/// assert!(72458187626359767538881667546874434552u128
-///         .checked_add(297346540425438035971591137457768079884u128) == None);
-/// assert!(238839560601171347832399587309251201746u128
-///         .checked_add(242579218632976152146903182551173496368u128) == None);
-/// assert!(225397974957210198494564952452362732921u128
-///         .checked_add(154164508028863701201042980473917385939u128) == None);
-/// assert!(294566236161675223872576442910457868935u128
-///         .checked_add(329306771496141303372377619188235007973u128) == None);
+/// assert!(176028053346526115377000430127089688940u128
+///         .checked_add(293872891822758795691996906048037747208u128) == None);
+/// assert!(248414921339935319392826660922356600063u128
+///         .checked_add(157970557453681754829954574212273029475u128) == None);
+/// assert!(224087302189027287733454619052593287115u128
+///         .checked_add(172374818419951960248733910265576699565u128) == None);
+/// assert!(324416747375774709211039594627319068596u128
+///         .checked_add(216224128245603375903183565757174422218u128) == None);
 /// # }
 /// ```
 /// ## Commutativity
@@ -1642,18 +1641,18 @@ pub fn core_ops_add_u128_add(){}
 ///         .checked_add(340282366920938463463374607431768211455u128)
 ///         == 340282366920938463463374607431768211455u128
 ///             .checked_add(340282366920938463463374607431768211455u128));
-/// assert!(199433924173343872839465418920654472541u128
-///         .checked_add(59163026947700566482286024598479722460u128)
-///         == 59163026947700566482286024598479722460u128
-///             .checked_add(199433924173343872839465418920654472541u128));
-/// assert!(289212290630215333669252338697091235710u128
-///         .checked_add(236075549949753618916452205453728983327u128)
-///         == 236075549949753618916452205453728983327u128
-///             .checked_add(289212290630215333669252338697091235710u128));
-/// assert!(284518684882817033394032554823890700836u128
-///         .checked_add(19378099773157293356198087970618110082u128)
-///         == 19378099773157293356198087970618110082u128
-///             .checked_add(284518684882817033394032554823890700836u128));
+/// assert!(186480696479260285981833345181261660792u128
+///         .checked_add(227705548393058304404556623422706413009u128)
+///         == 227705548393058304404556623422706413009u128
+///             .checked_add(186480696479260285981833345181261660792u128));
+/// assert!(267411779757966411400764072616204604065u128
+///         .checked_add(285521260725945353483379815649352803587u128)
+///         == 285521260725945353483379815649352803587u128
+///             .checked_add(267411779757966411400764072616204604065u128));
+/// assert!(31848357900658053707279435732143190922u128
+///         .checked_add(255494916345677679703442168575315068620u128)
+///         == 255494916345677679703442168575315068620u128
+///             .checked_add(31848357900658053707279435732143190922u128));
 /// # }
 /// ```
 /// ## Left identity
@@ -1667,16 +1666,16 @@ pub fn core_ops_add_u128_add(){}
 /// assert!(0u128.checked_add(0u128) == Some(0u128));
 /// assert!(340282366920938463463374607431768211455u128.checked_add(0u128)
 ///         == Some(340282366920938463463374607431768211455u128));
-/// assert!(335301091005109133454616108549665587307u128.checked_add(0u128)
-///         == Some(335301091005109133454616108549665587307u128));
-/// assert!(207586692813909776091453831710488124798u128.checked_add(0u128)
-///         == Some(207586692813909776091453831710488124798u128));
-/// assert!(140451055432199402458350061288231770804u128.checked_add(0u128)
-///         == Some(140451055432199402458350061288231770804u128));
-/// assert!(313066521221137356429217935298879591721u128.checked_add(0u128)
-///         == Some(313066521221137356429217935298879591721u128));
-/// assert!(77936528754177969417578059569092989353u128.checked_add(0u128)
-///         == Some(77936528754177969417578059569092989353u128));
+/// assert!(40309663057292881741452557762238726100u128.checked_add(0u128)
+///         == Some(40309663057292881741452557762238726100u128));
+/// assert!(97609709790548622651826528609563641946u128.checked_add(0u128)
+///         == Some(97609709790548622651826528609563641946u128));
+/// assert!(14991169416687567040366556387936363443u128.checked_add(0u128)
+///         == Some(14991169416687567040366556387936363443u128));
+/// assert!(82207581687985246518185744470061901435u128.checked_add(0u128)
+///         == Some(82207581687985246518185744470061901435u128));
+/// assert!(281517665166188637085664908117546103039u128.checked_add(0u128)
+///         == Some(281517665166188637085664908117546103039u128));
 /// # }
 /// ```
 /// ## Right identity
@@ -1690,16 +1689,16 @@ pub fn core_ops_add_u128_add(){}
 /// assert!(0u128.checked_add(0u128) == Some(0u128));
 /// assert!(0u128.checked_add(340282366920938463463374607431768211455u128)
 ///         == Some(340282366920938463463374607431768211455u128));
-/// assert!(0u128.checked_add(113891871890069189995663307045975395387u128)
-///         == Some(113891871890069189995663307045975395387u128));
-/// assert!(0u128.checked_add(279706794151156716772881565568633583013u128)
-///         == Some(279706794151156716772881565568633583013u128));
-/// assert!(0u128.checked_add(18250993685945966765121698267293579222u128)
-///         == Some(18250993685945966765121698267293579222u128));
-/// assert!(0u128.checked_add(147603520736975998041042811953217031511u128)
-///         == Some(147603520736975998041042811953217031511u128));
-/// assert!(0u128.checked_add(247621885866340685968408890283294647766u128)
-///         == Some(247621885866340685968408890283294647766u128));
+/// assert!(0u128.checked_add(190348595346634282447952766768023210136u128)
+///         == Some(190348595346634282447952766768023210136u128));
+/// assert!(0u128.checked_add(104526475574802544089919081626493162633u128)
+///         == Some(104526475574802544089919081626493162633u128));
+/// assert!(0u128.checked_add(279772134261981111028453807662240722673u128)
+///         == Some(279772134261981111028453807662240722673u128));
+/// assert!(0u128.checked_add(81577281226549620568237091137384152319u128)
+///         == Some(81577281226549620568237091137384152319u128));
+/// assert!(0u128.checked_add(36173597367687954834377331272500591766u128)
+///         == Some(36173597367687954834377331272500591766u128));
 /// # }
 /// ```
 /// ## Associativity

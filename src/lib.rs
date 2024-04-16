@@ -1,4 +1,5 @@
 #![doc = include_str!("../README.md")]
 
-pub mod generated_doc;
+#[path="../generated_tests/doc.rs"]
+pub mod tests;
 pub mod lifts;
