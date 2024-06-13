@@ -117,7 +117,7 @@ macro_rules! tests {
             $(,)?
     } => {
         {
-            let contracts: Vec<RenderedContract> = vec![$({$crate::contract! $contract make_doc()}),*];
+            let contracts: Vec<RenderedContract> = vec![$({$crate::contract! $contract make_doc(stringify!($ident))}),*];
 
             let doc = {
                 let mut docstr = String::new();
@@ -125,6 +125,7 @@ macro_rules! tests {
                 docstr += &contracts.iter().map(|RenderedContract {header, asserts}| format!("{}```
 # use core_spec::lifts::*;
 # use core_spec::*;
+# use num_traits::Euclid;
 # #[allow(arithmetic_overflow)] {{
 {asserts}
 # }}
@@ -185,12 +186,16 @@ macro_rules! contract {
         precondition: $pre_body: expr,
         postcondition: $post_body:expr
         $(,test_vector: [$($test_vector:expr),*])?
+        $(,strategy: $strategy:ident)?
         $(,n: $n:literal)?
+        $(,n_min: $n_min:literal)?
         $(,)?
     } => {
         #[allow(unused)]
-        fn make_doc() -> RenderedContract {
+        fn make_doc(context: &str) -> RenderedContract {
             use $crate::lifts::*;
+            use num_traits::Euclid;
+
             fn pre<$($tinput:Clone + PrintRust + core::fmt::Debug)?>($($input: $input_ty),*) -> bool {
                 $pre_body
             }
@@ -208,26 +213,85 @@ macro_rules! contract {
 
             use itertools::Itertools;
             $(type $tinput = u8;)?
-            const DEFAULT_N: usize = 5;
+            const DEFAULT_N: usize = 6;
             let mut n: usize = $crate::default_value!($($n)? DEFAULT_N);
-            type TheType = ($($input_ty),*);
-            let edge_cases: Vec<TheType> = TheType::edge_cases().iter().cloned().filter(|($($input),*)| pre($(<$input_ty as std::clone::Clone>::clone($input)),*)).collect();
-            if(edge_cases.len() >= DEFAULT_N * 1/2 && $crate::default_value!($($n)? 0) == 0 && $crate::default_value!($($n)? 1) == 1) {
-                n += DEFAULT_N * 1/2;
+            type OriginalType = ($($input_ty),*);
+            type Strategy = OriginalType;
+            fn unwrap_strategy(x: Strategy) -> OriginalType {
+                x
             }
+            {
+                // macro_rules! expand_input_types {
+                //     () => {$($input_ty),*}
+                // }
+                // duplicate::duplicate!{
+                //     [hello] [ $($input_ty),*],
+                #[duplicate::duplicate_item(
+                    composite_type;
+                    [ $($input_ty),* ];
+                )]
+                $(
+                    type Strategy = $strategy<composite_type>;
+                    fn unwrap_strategy(x: Strategy) -> OriginalType {
+                        x.unwrap_strategy_poly()
+                    }
+                )?
+                    type IgnoreMe = ();
+                // }
+                // type TheType = ($($input_ty),*);
+                // type TheType = ($(Strategy<$input_ty>),*);
+                type TheType = Strategy;
+
+                let edge_cases: Vec<TheType> = TheType::edge_cases().iter().cloned().filter(|inputs| {
+                    let ($($input),*) = unwrap_strategy(inputs.clone());
+                    // pre($(<$input_ty as std::clone::Clone>::clone($input)),*)
+                    pre($($input),*)
+                }).collect();
+            if(edge_cases.len() >= DEFAULT_N * 1/2 && $crate::default_value!($($n)? 0) == 0 && $crate::default_value!($($n)? 1) == 1) {
+                n += DEFAULT_N * 2/3;
+            }
+            let generate_test_vectors = |n: usize, sample: usize, debug: bool| {
             let test_vector: Vec<TheType> =
                 [$($($test_vector),*)?].iter().cloned().chain(
                     edge_cases.iter().cloned()
                 )
                 .chain(
                     std::iter::repeat_with(Random::random)
-                        .take(100_000)
+                        .take(sample)
                 )
                 .unique()
-                .filter(|($($input),*)| pre($(<$input_ty as std::clone::Clone>::clone($input)),*))
+                .filter(|inputs| {
+                    let ($($input),*) = unwrap_strategy(inputs.clone());
+                    if debug {
+                        eprint!("pre(");
+                        $(
+                            eprint!("{}, ", ($input).clone().print_as_rust());
+                        );*
+                    }
+                    let valid = pre($($input),*);
+                    if debug {
+                        eprint!(") = {valid}\n");
+                    }
+                    valid
+                })
                 .take(n).collect();
+
+                let test_vector: Vec<_> = test_vector.into_iter().map(unwrap_strategy).collect();
+                test_vector
+            };
+            let mut test_vector = generate_test_vectors(n, 100_000, false);
+            $(
+               if(test_vector.len() != n) {
+                   n = $n_min;
+                   let mut test_vector = generate_test_vectors(n, 100_000, false);
+               }
+            )?
+
             if(test_vector.len() != n) {
-                panic!("\n\nCould not find enough examples\n\n");
+                const HEADER: &str = $header;
+                eprintln!("\n\nCould not find enough examples\n\npre={}\n\ncontext={context}\nheader={HEADER}\n\ntest_vector={}", stringify!($pre_body), test_vector.print_as_rust());
+                generate_test_vectors(n, 30, true);
+                panic!();
             }
             *COUNT.lock().unwrap() += test_vector.len();
             let asserts = test_vector.into_iter().map(
@@ -237,6 +301,7 @@ macro_rules! contract {
             RenderedContract {
                 header: make_doc(),
                 asserts,
+            }
             }
         }
     }
