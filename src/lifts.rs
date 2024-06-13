@@ -40,6 +40,15 @@ pub struct FnR1<I, O> {
     pub string: String,
 }
 
+impl PrintRust for core::cmp::Ordering {
+    fn print_as_rust(&self) -> String {
+        format!("core::cmp::Ordering::{:#?}", self)
+    }
+    fn print_type() -> String {
+        format!("core::cmp::Ordering")
+    }
+}
+
 impl<I: PrintRust, O: PrintRust> PrintRust for FnR1<I, O> {
     fn print_as_rust(&self) -> String {
         format!("({})", self.string)
@@ -187,7 +196,20 @@ impl IntType for isize {}
 
 impl<T: IntType> TypicalEdgeCases for T {
     fn edge_cases() -> Vec<Self> {
-        vec![Self::min_value(), Self::zero(), Self::max_value()]
+        let signed = Self::zero().checked_sub(&Self::one()).is_some();
+        let n = |x: i8| <T as num_traits::cast::NumCast>::from(x).unwrap();
+        vec![
+            Some(Self::min_value()),
+            Some(Self::min_value() + n(1)),
+            signed.then(|| n(-1)),
+            Some(Self::zero()),
+            signed.then(|| n(1)),
+            Some(Self::max_value() - n(1)),
+            Some(Self::max_value()),
+        ]
+        .into_iter()
+        .flatten()
+        .collect()
     }
 }
 
@@ -281,11 +303,142 @@ impl<T: PrintRust> PrintRust for Option<T> {
     }
 }
 
+impl<A: PrintRust, B: PrintRust> PrintRust for (A, B) {
+    fn print_as_rust(&self) -> String {
+        format!("({}, {})", self.0.print_as_rust(), self.1.print_as_rust())
+    }
+    fn print_type() -> String {
+        format!("({}, {})", A::print_type(), B::print_type())
+    }
+}
+impl<A: PrintRust, B: PrintRust, C: PrintRust> PrintRust for (A, B, C) {
+    fn print_as_rust(&self) -> String {
+        format!(
+            "({}, {}, {})",
+            self.0.print_as_rust(),
+            self.1.print_as_rust(),
+            self.2.print_as_rust()
+        )
+    }
+    fn print_type() -> String {
+        format!(
+            "({}, {}, {})",
+            A::print_type(),
+            B::print_type(),
+            C::print_type()
+        )
+    }
+}
+
+macro_rules! derive_for_newtype {
+    ($ty:ident) => {
+        impl<T: PrintRust> PrintRust for $ty<T> {
+            fn print_as_rust(&self) -> String {
+                T::print_as_rust(&self.0)
+            }
+            fn print_type() -> String {
+                T::print_type()
+            }
+        }
+
+        impl<T: Lift> Lift for $ty<T> {
+            type Abstract = T::Abstract;
+            fn up(self) -> Self::Abstract {
+                self.0.up()
+            }
+            fn down(x: Self::Abstract) -> Self {
+                Self(T::down(x))
+            }
+        }
+
+        impl<T: TypicalEdgeCases + Clone> TypicalEdgeCases for $ty<T> {
+            fn edge_cases() -> Vec<Self> {
+                T::edge_cases().into_iter().map(|x| Self(x)).collect()
+            }
+        }
+
+        impl<T> UnwrapStrategyPoly<T> for $ty<T> {
+            fn unwrap_strategy_poly(self) -> T {
+                self.0
+            }
+        }
+    };
+}
+
+pub trait UnwrapStrategyPoly<Unwrapped> {
+    fn unwrap_strategy_poly(self) -> Unwrapped;
+}
+
+impl<UA, UB, A: UnwrapStrategyPoly<UA>, B: UnwrapStrategyPoly<UB>> UnwrapStrategyPoly<(UA, UB)>
+    for (A, B)
+{
+    fn unwrap_strategy_poly(self) -> (UA, UB) {
+        (self.0.unwrap_strategy_poly(), self.1.unwrap_strategy_poly())
+    }
+}
+impl<
+        UA,
+        UB,
+        UC,
+        A: UnwrapStrategyPoly<UA>,
+        B: UnwrapStrategyPoly<UB>,
+        C: UnwrapStrategyPoly<UC>,
+    > UnwrapStrategyPoly<(UA, UB, UC)> for (A, B, C)
+{
+    fn unwrap_strategy_poly(self) -> (UA, UB, UC) {
+        (
+            self.0.unwrap_strategy_poly(),
+            self.1.unwrap_strategy_poly(),
+            self.2.unwrap_strategy_poly(),
+        )
+    }
+}
+
+#[allow(dead_code)]
+mod combinations {
+    #![allow(non_camel_case_types)]
+    use super::*;
+    pub type SmallInt_SmallInt<T, U> = (SmallInt<T>, SmallInt<U>);
+    pub type SmallInt_SmallInt_SmallInt<T, U, V> = (SmallInt<T>, SmallInt<U>, SmallInt<V>);
+    pub type TinyInt_TinyInt_TinyInt<T, U, V> = (TinyInt<T>, TinyInt<U>, TinyInt<V>);
+    pub type TinyInt_TinyInt<T, U> = (TinyInt<T>, TinyInt<U>);
+    pub type Id_TinyInt<T, U> = (IdStrategy<T>, TinyInt<U>);
+    pub type Id_MicroInt<T, U> = (IdStrategy<T>, MicroInt<U>);
+}
+pub use combinations::*;
+
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct SmallInt<T>(pub T);
+
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct TinyInt<T>(pub T);
+
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct MicroInt<T>(pub T);
+
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct IdStrategy<T>(pub T);
+
+impl<'a, T: arbitrary::Arbitrary<'a>> arbitrary::Arbitrary<'a> for IdStrategy<T> {
+    fn arbitrary(unstructured: &mut arbitrary::Unstructured<'a>) -> arbitrary::Result<Self> {
+        Ok(Self(T::arbitrary(unstructured)?))
+    }
+}
+
+derive_for_newtype!(SmallInt);
+derive_for_newtype!(TinyInt);
+derive_for_newtype!(MicroInt);
+derive_for_newtype!(IdStrategy);
+
 macro_rules! print_rust_num_lit {
     ($ty:ident) => {
         impl PrintRust for $ty {
             fn print_as_rust(&self) -> String {
-                format!("{}{}", self, stringify!($ty))
+                if self < &0 {
+                    format!("({}{})", self, stringify!($ty))
+                }else {
+                    format!("{}{}", self, stringify!($ty))
+                }
             }
             fn print_type() -> String {
                 format!("{}", stringify!($ty))
@@ -298,9 +451,48 @@ macro_rules! print_rust_num_lit {
             }
             fn down(x: Self::Abstract) -> Self {
                 use num_traits::cast::ToPrimitive;
-                paste::paste! {
-                    x.[<to_ $ty>]().unwrap()
-                }
+                paste::paste! { x.[<to_ $ty>]().expect(&format!("BigInt {x} is not fitting type {}", stringify!($ty))) }
+            }
+        }
+
+        impl<'a> arbitrary::Arbitrary<'a> for SmallInt<$ty> {
+            fn arbitrary(
+                unstructured: &mut arbitrary::Unstructured<'a>,
+            ) -> arbitrary::Result<Self> {
+                println!("a");
+                let n = $ty::arbitrary(unstructured)?;
+                use num_bigint::ToBigInt;
+                let n = n.to_bigint().unwrap().sqrt();
+                Ok(Self(n.try_into().unwrap()))
+            }
+        }
+
+        impl<'a> arbitrary::Arbitrary<'a> for TinyInt<$ty> {
+            fn arbitrary(
+                unstructured: &mut arbitrary::Unstructured<'a>,
+            ) -> arbitrary::Result<Self> {
+                println!("b");
+                let n = $ty::arbitrary(unstructured)?;
+                use num_bigint::ToBigInt;
+                let n: BigInt = n.to_bigint().unwrap().cbrt();
+                let n: $ty = n.try_into().unwrap();
+                Ok(Self(n))
+            }
+        }
+
+        impl<'a> arbitrary::Arbitrary<'a> for MicroInt<$ty> {
+            fn arbitrary(
+                unstructured: &mut arbitrary::Unstructured<'a>,
+            ) -> arbitrary::Result<Self> {
+                let n: $ty = $ty::arbitrary(unstructured)?;
+                use num_bigint::ToBigInt;
+                let modulo: $ty = $ty::MAX
+                    .to_bigint()
+                    .unwrap()
+                    .min(140u8.to_bigint().unwrap())
+                    .try_into()
+                    .unwrap();
+                Ok(Self(n % modulo))
             }
         }
     };

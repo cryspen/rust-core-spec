@@ -24,7 +24,10 @@ fn main() {
     std::fs::write(
         format!("{OUT}/bin.rs"),
         helpers::rust_format(&format!(
-            "//! This module contains {count} tests, organized in functions.\n{}\n{}\nfn main(){{{}}}", 
+            "//! This module contains {count} tests, organized in functions.\n{}\n{}\nfn main(){{
+  println!(\"Running {count} tests\n\");
+  {}
+}}",
             "#![allow(arithmetic_overflow)]
 #![allow(unused_parens)]
 #![allow(unused_comparisons)]
@@ -37,5 +40,6 @@ use core_spec::*;
                 .collect::<Vec<_>>()
                 .join("\n")
         )),
-    ).expect("could not write src");
+    )
+    .expect("could not write src");
 }

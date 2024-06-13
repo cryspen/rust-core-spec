@@ -65,6 +65,7 @@ name = "core-spec"
 version = "0.1.0"
 dependencies = [
  "arbitrary",
+ "duplicate",
  "itertools",
  "num-bigint",
  "num-traits",
@@ -161,6 +162,16 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "duplicate"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "de78e66ac9061e030587b2a2e75cc88f22304913c907b11307bca737141230cb"
+dependencies = [
+ "heck",
+ "proc-macro-error",
 ]
 
 [[package]]
