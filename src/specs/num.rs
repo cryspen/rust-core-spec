@@ -604,6 +604,7 @@ macro_rules! mk_unsigned_tests {
                     inputs: [x: $typ, y: $typ],
                     precondition: x.up() * y.up() <= $max.up(),
                     postcondition: x.saturating_mul(y) == eval($typ::down(x.up() * y.up())),
+                    strategy: SmallInt_SmallInt,
                 },
                 contract! {
                     header: "Semantics of the overflowing saturating multiplication",
@@ -626,6 +627,8 @@ macro_rules! mk_unsigned_tests {
                     inputs: [x: $typ, y: $typ],
                     precondition: x.up() * y.up() <= $max.up(),
                     postcondition: x.wrapping_mul(y) == eval($typ::down(x.up() * y.up())),
+
+                    strategy: SmallInt_SmallInt,
                 },
                 // contract! {
                 //     header: "Left identity",
