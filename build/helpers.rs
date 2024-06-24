@@ -242,13 +242,16 @@ macro_rules! contract {
                 // type TheType = ($(Strategy<$input_ty>),*);
                 type TheType = Strategy;
 
-                let edge_cases: Vec<TheType> = TheType::edge_cases().iter().cloned().filter(|inputs| {
+                let mut edge_cases: Vec<TheType> = TheType::edge_cases().iter().cloned().filter(|inputs| {
                     let ($($input),*) = unwrap_strategy(inputs.clone());
                     // pre($(<$input_ty as std::clone::Clone>::clone($input)),*)
                     pre($($input),*)
                 }).collect();
             if(edge_cases.len() >= DEFAULT_N * 1/2 && $crate::default_value!($($n)? 0) == 0 && $crate::default_value!($($n)? 1) == 1) {
                 n += DEFAULT_N * 2/3;
+                use rand::thread_rng;
+                use rand::seq::SliceRandom;
+                edge_cases.shuffle(&mut thread_rng());
             }
             let generate_test_vectors = |n: usize, sample: usize, debug: bool| {
             let test_vector: Vec<TheType> =
