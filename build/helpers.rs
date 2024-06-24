@@ -247,6 +247,7 @@ macro_rules! contract {
                     // pre($(<$input_ty as std::clone::Clone>::clone($input)),*)
                     pre($($input),*)
                 }).collect();
+            let original_n = n;
             if(edge_cases.len() >= DEFAULT_N * 1/2 && $crate::default_value!($($n)? 0) == 0 && $crate::default_value!($($n)? 1) == 1) {
                 n += DEFAULT_N * 2/3;
                 use rand::thread_rng;
@@ -256,7 +257,7 @@ macro_rules! contract {
             let generate_test_vectors = |n: usize, sample: usize, debug: bool| {
             let test_vector: Vec<TheType> =
                 [$($($test_vector),*)?].iter().cloned().chain(
-                    edge_cases.iter().cloned()
+                    edge_cases.iter().cloned().take(original_n)
                 )
                 .chain(
                     std::iter::repeat_with(Random::random)
