@@ -108,6 +108,10 @@ pub fn rust_format_expr(contents: &str) -> String {
         .into()
 }
 
+/// Defines a set of contracts that specify the semantics of an
+/// item. This macro expects (1) an English header that explains what
+/// the contracts are specifying, (2) a unique identifier for this set
+/// of contracts and (3) a list of contracts.
 #[macro_export]
 macro_rules! tests {
     {
@@ -178,6 +182,22 @@ pub struct RenderedContract {
     pub asserts: String,
 }
 
+/// Defines a contract. This macro expects the following named
+/// arguments:
+
+/// - `header`: an English description of the contract.  
+/// - `inputs`: a comma-separated list of typed binders, optionally
+/// prefixed with generic types arguments without bound constraints
+/// (i.e. `<A, B>`). Example: `<T>[x: T, y: u8]`.  
+/// - `precondition`: a Rust boolean expression that can refer to any
+/// declared inputs.  
+/// - `postcondition`: a Rust boolean expression that can refer to any
+/// declared inputs.  
+/// - `test_vector` (optional): an explicit test vectors. Example:
+/// `[(1,2), (3,4)]`.  
+/// - `strategy`: a strategy for picking random values. See
+/// `lifts::SmallInt` for an example.  
+/// - `n`: the number of tests to be generated.
 #[macro_export]
 macro_rules! contract {
     {
@@ -185,11 +205,11 @@ macro_rules! contract {
         inputs: $(<$tinput:ident>)?[$($input:ident : $input_ty:ty),*],
         precondition: $pre_body: expr,
         postcondition: $post_body:expr
-        $(,test_vector: [$($test_vector:expr),*])?
-        $(,strategy: $strategy:ident)?
-        $(,n: $n:literal)?
-        $(,n_min: $n_min:literal)?
-        $(,)?
+            $(,test_vector: [$($test_vector:expr),*])?
+            $(,strategy: $strategy:ident)?
+            $(,n: $n:literal)?
+            $(,n_min: $n_min:literal)?
+            $(,)?
     } => {
         #[allow(unused)]
         fn make_doc(context: &str) -> RenderedContract {
@@ -213,7 +233,7 @@ macro_rules! contract {
 
             use itertools::Itertools;
             $(type $tinput = u8;)?
-            const DEFAULT_N: usize = 6;
+                const DEFAULT_N: usize = 6;
             let mut n: usize = $crate::default_value!($($n)? DEFAULT_N);
             type OriginalType = ($($input_ty),*);
             type Strategy = OriginalType;
@@ -221,11 +241,6 @@ macro_rules! contract {
                 x
             }
             {
-                // macro_rules! expand_input_types {
-                //     () => {$($input_ty),*}
-                // }
-                // duplicate::duplicate!{
-                //     [hello] [ $($input_ty),*],
                 #[duplicate::duplicate_item(
                     composite_type;
                     [ $($input_ty),* ];
@@ -236,76 +251,72 @@ macro_rules! contract {
                         x.unwrap_strategy_poly()
                     }
                 )?
-                    type IgnoreMe = ();
-                // }
-                // type TheType = ($($input_ty),*);
-                // type TheType = ($(Strategy<$input_ty>),*);
+                type IgnoreMe = ();
                 type TheType = Strategy;
 
                 let mut edge_cases: Vec<TheType> = TheType::edge_cases().iter().cloned().filter(|inputs| {
                     let ($($input),*) = unwrap_strategy(inputs.clone());
-                    // pre($(<$input_ty as std::clone::Clone>::clone($input)),*)
                     pre($($input),*)
                 }).collect();
-            let original_n = n;
-            if(edge_cases.len() >= DEFAULT_N * 1/2 && $crate::default_value!($($n)? 0) == 0 && $crate::default_value!($($n)? 1) == 1) {
-                n += DEFAULT_N * 2/3;
-                use rand::thread_rng;
-                use rand::seq::SliceRandom;
-                edge_cases.shuffle(&mut thread_rng());
-            }
-            let generate_test_vectors = |n: usize, sample: usize, debug: bool| {
-            let test_vector: Vec<TheType> =
-                [$($($test_vector),*)?].iter().cloned().chain(
-                    edge_cases.iter().cloned().take(original_n)
-                )
-                .chain(
-                    std::iter::repeat_with(Random::random)
-                        .take(sample)
-                )
-                .unique()
-                .filter(|inputs| {
-                    let ($($input),*) = unwrap_strategy(inputs.clone());
-                    if debug {
-                        eprint!("pre(");
-                        $(
-                            eprint!("{}, ", ($input).clone().print_as_rust());
-                        );*
-                    }
-                    let valid = pre($($input),*);
-                    if debug {
-                        eprint!(") = {valid}\n");
-                    }
-                    valid
-                })
-                .take(n).collect();
+                let original_n = n;
+                if(edge_cases.len() >= DEFAULT_N * 1/2 && $crate::default_value!($($n)? 0) == 0 && $crate::default_value!($($n)? 1) == 1) {
+                    n += DEFAULT_N * 2/3;
+                    use rand::thread_rng;
+                    use rand::seq::SliceRandom;
+                    edge_cases.shuffle(&mut thread_rng());
+                }
+                let generate_test_vectors = |n: usize, sample: usize, debug: bool| {
+                    let test_vector: Vec<TheType> =
+                        [$($($test_vector),*)?].iter().cloned().chain(
+                            edge_cases.iter().cloned().take(original_n)
+                        )
+                        .chain(
+                            std::iter::repeat_with(Random::random)
+                                .take(sample)
+                        )
+                        .unique()
+                        .filter(|inputs| {
+                            let ($($input),*) = unwrap_strategy(inputs.clone());
+                            if debug {
+                                eprint!("pre(");
+                                $(
+                                    eprint!("{}, ", ($input).clone().print_as_rust());
+                                );*
+                            }
+                            let valid = pre($($input),*);
+                            if debug {
+                                eprint!(") = {valid}\n");
+                            }
+                            valid
+                        })
+                        .take(n).collect();
 
-                let test_vector: Vec<_> = test_vector.into_iter().map(unwrap_strategy).collect();
-                test_vector
-            };
-            let mut test_vector = generate_test_vectors(n, 100_000, false);
-            $(
-               if(test_vector.len() != n) {
-                   n = $n_min;
-                   let mut test_vector = generate_test_vectors(n, 100_000, false);
-               }
-            )?
+                    let test_vector: Vec<_> = test_vector.into_iter().map(unwrap_strategy).collect();
+                    test_vector
+                };
+                let mut test_vector = generate_test_vectors(n, 100_000, false);
+                $(
+                    if(test_vector.len() != n) {
+                        n = $n_min;
+                        let mut test_vector = generate_test_vectors(n, 100_000, false);
+                    }
+                )?
 
-            if(test_vector.len() != n) {
-                const HEADER: &str = $header;
-                eprintln!("\n\nCould not find enough examples\n\npre={}\n\ncontext={context}\nheader={HEADER}\n\ntest_vector={}", stringify!($pre_body), test_vector.print_as_rust());
-                generate_test_vectors(n, 30, true);
-                panic!();
-            }
-            *COUNT.lock().unwrap() += test_vector.len();
-            let asserts = test_vector.into_iter().map(
-                |($($input),*)|
-                format!("assert!({});", post($($input),*))
-            ).collect::<Vec<_>>().join("\n");
-            RenderedContract {
-                header: make_doc(),
-                asserts,
-            }
+                    if(test_vector.len() != n) {
+                        const HEADER: &str = $header;
+                        eprintln!("\n\nCould not find enough examples\n\npre={}\n\ncontext={context}\nheader={HEADER}\n\ntest_vector={}", stringify!($pre_body), test_vector.print_as_rust());
+                        generate_test_vectors(n, 30, true);
+                        panic!();
+                    }
+                *COUNT.lock().unwrap() += test_vector.len();
+                let asserts = test_vector.into_iter().map(
+                    |($($input),*)|
+                    format!("assert!({});", post($($input),*))
+                ).collect::<Vec<_>>().join("\n");
+                RenderedContract {
+                    header: make_doc(),
+                    asserts,
+                }
             }
         }
     }

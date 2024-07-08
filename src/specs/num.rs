@@ -509,52 +509,52 @@ macro_rules! mk_unsigned_tests {
                     precondition: x.up() * y.up() > $max.up(),
                     postcondition: panics!(x * y),
                 },
-                // contract! {
-                //     header: "Left identity",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: x * 1 == x,
-                // },
-                // contract! {
-                //     header: "Right identity",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: 1 * x == x,
-                // },
-                // contract! {
-                //     header: "Commutativity",
-                //     inputs: [x: $typ, y: $typ],
-                //     precondition: x.up() * y.up() <= $max.up(),
-                //     postcondition: x * y == y * x,
-                //     strategy: SmallNumbers,
-                // },
-                // contract! {
-                //     header: "Associativity",
-                //     inputs: [x: $typ, y: $typ, z: $typ],
-                //     precondition: (
-                //         x.up() * y.up() * z.up() <= $max.up() &&
-                //             x > 0 && y > 0 && z > 0
-                //     ),
-                //     postcondition: (x * y) * z == x * (y * z),
-                //     strategy: TinyNumbers,
-                // },
-                // contract! {
-                //     header: "Distributivity",
-                //     inputs: [x: $typ, y: $typ, z: $typ],
-                //     precondition: (
-                //         x.up() * (y.up() + z.up()) <= $max.up()
-                //             && x > 0
-                //     ),
-                //     postcondition: x * (y + z) == x * y + x * z,
-                //     strategy: SmallNumbers,
-                // },
-                // contract! {
-                //     header: "Zero",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: x * 0 == 0,
-                //     strategy: SmallNumbers,
-                // },
+                contract! {
+                    header: "Left identity",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: x * 1 == x,
+                },
+                contract! {
+                    header: "Right identity",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: 1 * x == x,
+                },
+                contract! {
+                    header: "Commutativity",
+                    inputs: [x: $typ, y: $typ],
+                    precondition: x.up() * y.up() <= $max.up(),
+                    postcondition: x * y == y * x,
+                    strategy: SmallInt_SmallInt,
+                },
+                contract! {
+                    header: "Associativity",
+                    inputs: [x: $typ, y: $typ, z: $typ],
+                    precondition: (
+                        x.up() * y.up() * z.up() <= $max.up() &&
+                            x > 0 && y > 0 && z > 0
+                    ),
+                    postcondition: (x * y) * z == x * (y * z),
+                    strategy: TinyInt_TinyInt_TinyInt,
+                },
+                contract! {
+                    header: "Distributivity",
+                    inputs: [x: $typ, y: $typ, z: $typ],
+                    precondition: (
+                        x.up() * (y.up() + z.up()) <= $max.up()
+                            && x > 0
+                    ),
+                    postcondition: x * (y + z) == x * y + x * z,
+                    strategy: SmallInt_SmallInt_SmallInt,
+                },
+                contract! {
+                    header: "Zero",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: x * 0 == 0,
+                    strategy: SmallInt,
+                },
             }
             tests! {
                 header: concat!("Properties for [`", stringify!($typ), "::checked_mul`]"),
@@ -630,52 +630,52 @@ macro_rules! mk_unsigned_tests {
 
                     strategy: SmallInt_SmallInt,
                 },
-                // contract! {
-                //     header: "Left identity",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: x * 1 == x,
-                // },
-                // contract! {
-                //     header: "Right identity",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: 1 * x == x,
-                // },
-                // contract! {
-                //     header: "Commutativity",
-                //     inputs: [x: $typ, y: $typ],
-                //     precondition: x.up() * y.up() <= $max.up(),
-                //     postcondition: x * y == y * x,
-                //     strategy: SmallNumbers,
-                // },
-                // contract! {
-                //     header: "Associativity",
-                //     inputs: [x: $typ, y: $typ, z: $typ],
-                //     precondition: (
-                //         x.up() * y.up() * z.up() <= $max.up() &&
-                //             x > 0 && y > 0 && z > 0
-                //     ),
-                //     postcondition: (x * y) * z == x * (y * z),
-                //     strategy: TinyNumbers,
-                // },
-                // contract! {
-                //     header: "Distributivity",
-                //     inputs: [x: $typ, y: $typ, z: $typ],
-                //     precondition: (
-                //         x.up() * (y.up() + z.up()) <= $max.up()
-                //             && x > 0
-                //     ),
-                //     postcondition: x * (y + z) == x * y + x * z,
-                //     strategy: SmallNumbers,
-                // },
-                // contract! {
-                //     header: "Zero",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: x * 0 == 0,
-                //     strategy: SmallNumbers,
-                // },
+                contract! {
+                    header: "Left identity",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: x * 1 == x,
+                },
+                contract! {
+                    header: "Right identity",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: 1 * x == x,
+                },
+                contract! {
+                    header: "Commutativity",
+                    inputs: [x: $typ, y: $typ],
+                    precondition: x.up() * y.up() <= $max.up(),
+                    postcondition: x * y == y * x,
+                    strategy: SmallInt_SmallInt,
+                },
+                contract! {
+                    header: "Associativity",
+                    inputs: [x: $typ, y: $typ, z: $typ],
+                    precondition: (
+                        x.up() * y.up() * z.up() <= $max.up() &&
+                            x > 0 && y > 0 && z > 0
+                    ),
+                    postcondition: (x * y) * z == x * (y * z),
+                    strategy: TinyInt_TinyInt_TinyInt,
+                },
+                contract! {
+                    header: "Distributivity",
+                    inputs: [x: $typ, y: $typ, z: $typ],
+                    precondition: (
+                        x.up() * (y.up() + z.up()) <= $max.up()
+                            && x > 0
+                    ),
+                    postcondition: x * (y + z) == x * y + x * z,
+                    strategy: SmallInt_SmallInt_SmallInt,
+                },
+                contract! {
+                    header: "Zero",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: x * 0 == 0,
+                    strategy: SmallInt,
+                },
             }
 
 
@@ -695,18 +695,18 @@ macro_rules! mk_unsigned_tests {
                     precondition: x.up() - y.up() < 0u8.up(),
                     postcondition: panics!(x - y),
                 },
-                // contract! {
-                //     header: "Subtraction is the reverse of addition",
-                //     inputs: [x: $typ, y: $typ],
-                //     precondition: x.up() - y.up() >= 0u8.up(),
-                //     postcondition: (x - y) + y == x,
-                // },
-                // contract! {
-                //     header: "Left identity",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: x - 0 == x,
-                // },
+                contract! {
+                    header: "Subtraction is the reverse of addition",
+                    inputs: [x: $typ, y: $typ],
+                    precondition: x.up() - y.up() >= 0u8.up(),
+                    postcondition: (x - y) + y == x,
+                },
+                contract! {
+                    header: "Left identity",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: x - 0 == x,
+                },
             }
             tests! {
                 header: concat!("Properties for [`", stringify!($typ), "::wrapping_sub`]"),
@@ -729,18 +729,18 @@ macro_rules! mk_unsigned_tests {
                     precondition: true,
                     postcondition: x.wrapping_sub(y) == eval($typ::down((x.up() - y.up()).rem_euclid(&($max.up() + 1)))),
                 },
-                // contract! {
-                //     header: "Wrapping subtraction is the reverse of wrapping subtraction",
-                //     inputs: [x: $typ, y: $typ],
-                //     precondition: true,
-                //     postcondition: (x.wrapping_sub(y)).wrapping_add(y) == x,
-                // },
-                // contract! {
-                //     header: "Left identity",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: x.wrapping_sub(0) == x,
-                // },
+                contract! {
+                    header: "Wrapping subtraction is the reverse of wrapping subtraction",
+                    inputs: [x: $typ, y: $typ],
+                    precondition: true,
+                    postcondition: (x.wrapping_sub(y)).wrapping_add(y) == x,
+                },
+                contract! {
+                    header: "Left identity",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: x.wrapping_sub(0) == x,
+                },
             }
             tests! {
                 header: concat!("Properties for [`", stringify!($typ), "::checked_sub`]"),
@@ -757,18 +757,18 @@ macro_rules! mk_unsigned_tests {
                     precondition: x.up() - y.up() < 0u8.up(),
                     postcondition: x.checked_sub(y) == None,
                 },
-                // contract! {
-                //     header: "Checked subtraction is the reverse of checked addition",
-                //     inputs: [x: $typ, y: $typ],
-                //     precondition: x.up() - y.up() >= 0u8.up(),
-                //     postcondition: (x.checked_sub(y)).and_then(|r| r.checked_add(y)) == Some(x),
-                // },
-                // contract! {
-                //     header: "Left identity",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: x.checked_sub(0) == Some(x),
-                // },
+                contract! {
+                    header: "Checked subtraction is the reverse of checked addition",
+                    inputs: [x: $typ, y: $typ],
+                    precondition: x.up() - y.up() >= 0u8.up(),
+                    postcondition: (x.checked_sub(y)).and_then(|r| r.checked_add(y)) == Some(x),
+                },
+                contract! {
+                    header: "Left identity",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: x.checked_sub(0) == Some(x),
+                },
             }
             tests! {
                 header: concat!("Properties for [`", stringify!($typ), "::saturating_sub`]"),
@@ -809,30 +809,30 @@ macro_rules! mk_unsigned_tests {
                     precondition: x.up() + y.up() > $max.up(),
                     postcondition: panics!(x + y),
                 },
-                // contract! {
-                //     header: "Commutativity",
-                //     inputs: [x: $typ, y: $typ],
-                //     precondition: x.up() + y.up() <= $max.up(),
-                //     postcondition: x + y == y + x,
-                // },
-                // contract! {
-                //     header: "Left identity",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: x + 0 == x,
-                // },
-                // contract! {
-                //     header: "Right identity",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: 0 + x == x,
-                // },
-                // contract! {
-                //     header: "Associativity",
-                //     inputs: [x: $typ, y: $typ, z: $typ],
-                //     precondition: x.up() + y.up() + z.up() <= $max.up(),
-                //     postcondition: (x + y) + z == x + (y + z),
-                // },
+                contract! {
+                    header: "Commutativity",
+                    inputs: [x: $typ, y: $typ],
+                    precondition: x.up() + y.up() <= $max.up(),
+                    postcondition: x + y == y + x,
+                },
+                contract! {
+                    header: "Left identity",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: x + 0 == x,
+                },
+                contract! {
+                    header: "Right identity",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: 0 + x == x,
+                },
+                contract! {
+                    header: "Associativity",
+                    inputs: [x: $typ, y: $typ, z: $typ],
+                    precondition: x.up() + y.up() + z.up() <= $max.up(),
+                    postcondition: (x + y) + z == x + (y + z),
+                },
             }
             tests! {
                 header: concat!("Properties for [`", stringify!($typ), "::wrapping_add`]"),
@@ -855,33 +855,33 @@ macro_rules! mk_unsigned_tests {
                     precondition: x.up() + y.up() > $max.up(),
                     postcondition: x.wrapping_add(y) == eval($typ::down(x.up() + y.up() - $max - 1)),
                 },
-                // contract! {
-                //     header: "Commutativity",
-                //     inputs: [x: $typ, y: $typ],
-                //     precondition: true,
-                //     postcondition: x.wrapping_add(y) == y.wrapping_add(x),
-                // },
-                // contract! {
-                //     header: "Left identity",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: x.wrapping_add(0) == x,
-                // },
-                // contract! {
-                //     header: "Right identity",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: {
-                //         let zero: $typ = 0;
-                //         zero.wrapping_add(x) == x
-                //     },
-                // },
-                // contract! {
-                //     header: "Associativity",
-                //     inputs: [x: $typ, y: $typ, z: $typ],
-                //     precondition: x.up() + y.up() + z.up() <= $max.up(),
-                //     postcondition: (x.wrapping_add(y)).wrapping_add(z) == x.wrapping_add(y.wrapping_add(z)),
-                // },
+                contract! {
+                    header: "Commutativity",
+                    inputs: [x: $typ, y: $typ],
+                    precondition: true,
+                    postcondition: x.wrapping_add(y) == y.wrapping_add(x),
+                },
+                contract! {
+                    header: "Left identity",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: x.wrapping_add(0) == x,
+                },
+                contract! {
+                    header: "Right identity",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: {
+                        let zero: $typ = 0;
+                        zero.wrapping_add(x) == x
+                    },
+                },
+                contract! {
+                    header: "Associativity",
+                    inputs: [x: $typ, y: $typ, z: $typ],
+                    precondition: x.up() + y.up() + z.up() <= $max.up(),
+                    postcondition: (x.wrapping_add(y)).wrapping_add(z) == x.wrapping_add(y.wrapping_add(z)),
+                },
             }
             tests! {
                 header: concat!("Properties for [`", stringify!($typ), "::checked_add`]"),
@@ -898,30 +898,30 @@ macro_rules! mk_unsigned_tests {
                     precondition: x.up() + y.up() > $max.up(),
                     postcondition: x.checked_add(y) == None,
                 },
-                // contract! {
-                //     header: "Commutativity",
-                //     inputs: [x: $typ, y: $typ],
-                //     precondition: true,
-                //     postcondition: x.checked_add(y) == y.checked_add(x),
-                // },
-                // contract! {
-                //     header: "Left identity",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: x.checked_add([<0 $typ>]) == Some(x),
-                // },
-                // contract! {
-                //     header: "Right identity",
-                //     inputs: [x: $typ],
-                //     precondition: true,
-                //     postcondition: [<0 $typ>].checked_add(x) == Some(x),
-                // },
-                // contract! {
-                //     header: "Associativity",
-                //     inputs: [x: $typ, y: $typ, z: $typ],
-                //     precondition: true,
-                //     postcondition: x.checked_add(y).and_then(|iv| iv.checked_add(z)) == y.checked_add(z).and_then(|iv| x.checked_add(iv)),
-                // },
+                contract! {
+                    header: "Commutativity",
+                    inputs: [x: $typ, y: $typ],
+                    precondition: true,
+                    postcondition: x.checked_add(y) == y.checked_add(x),
+                },
+                contract! {
+                    header: "Left identity",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: x.checked_add([<0 $typ>]) == Some(x),
+                },
+                contract! {
+                    header: "Right identity",
+                    inputs: [x: $typ],
+                    precondition: true,
+                    postcondition: [<0 $typ>].checked_add(x) == Some(x),
+                },
+                contract! {
+                    header: "Associativity",
+                    inputs: [x: $typ, y: $typ, z: $typ],
+                    precondition: true,
+                    postcondition: x.checked_add(y).and_then(|iv| iv.checked_add(z)) == y.checked_add(z).and_then(|iv| x.checked_add(iv)),
+                },
             }
             tests! {
                 header: concat!("Properties for [`", stringify!($typ), "::saturating_add`]"),

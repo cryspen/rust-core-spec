@@ -176,6 +176,7 @@ impl TypicalEdgeCases for Fn1<u8, u8> {
     }
 }
 
+/// The various edge cases for a given type.
 pub trait TypicalEdgeCases: Sized {
     fn edge_cases() -> Vec<Self>;
 }
@@ -254,8 +255,13 @@ impl<T: TypicalEdgeCases + Clone, U: TypicalEdgeCases + Clone, V: TypicalEdgeCas
     }
 }
 
+/// When this trait is implemented for a type `T`, it allows to print
+/// any value of type `T` as a valid Rust expression, but also to
+/// print the type `T` as a valid Rust type.
 pub trait PrintRust {
+    /// Prints a value of type `Self` as a valid Rust expression.
     fn print_as_rust(&self) -> String;
+    /// Prints the type `Self` as a valid Rust type.
     fn print_type() -> String;
 }
 
@@ -459,10 +465,11 @@ macro_rules! print_rust_num_lit {
             fn arbitrary(
                 unstructured: &mut arbitrary::Unstructured<'a>,
             ) -> arbitrary::Result<Self> {
-                println!("a");
                 let n = $ty::arbitrary(unstructured)?;
                 use num_bigint::ToBigInt;
+                eprintln!("n={n:?}");
                 let n = n.to_bigint().unwrap().sqrt();
+                eprintln!("n={n:?}");
                 Ok(Self(n.try_into().unwrap()))
             }
         }
@@ -471,7 +478,6 @@ macro_rules! print_rust_num_lit {
             fn arbitrary(
                 unstructured: &mut arbitrary::Unstructured<'a>,
             ) -> arbitrary::Result<Self> {
-                println!("b");
                 let n = $ty::arbitrary(unstructured)?;
                 use num_bigint::ToBigInt;
                 let n: BigInt = n.to_bigint().unwrap().cbrt();
